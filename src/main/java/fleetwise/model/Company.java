@@ -1,5 +1,6 @@
 package fleetwise.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -23,5 +24,6 @@ public class Company {
     private String email;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Vehicle> vehicles;
 }
