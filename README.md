@@ -20,31 +20,6 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 | Database (prod target) | Azure SQL |
 | Build | Maven |
 
----
-
-## Architecture (current – Phase 1 / 2)
-
-```
-Client
-  │ HTTPS
-  ▼
-REST API  (/api/v1/...)
-  │
-  ├── Company
-  ├── Vehicle
-  ├── Driver
-  ├── Trip          ← distance = endMileage - startMileage (backend only)
-  ├── Fueling       ← totalCost = liters × pricePerLiter (backend only)
-  ├── Expense
-  └── Maintenance
-  │
-  ▼
-PostgreSQL
-```
-
-Business rules live in the **service layer**, never in the controller or the client.
-
----
 
 ## Project structure (feature / domain oriented)
 
@@ -101,9 +76,9 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 | Phase | Scope | Status |
 |-------|--------|--------|
 | 0 | Product definition | Done |
-| 1 | Database + domain model | **Done (this commit series)** |
+| 1 | Database + domain model | **Done** |
 | 2 | Spring Boot REST API + business rules | **Done** |
-| 3 | Analytics (consumption, cost/km, variation, anomaly rules) | Next |
+| 3 | Analytics (consumption, cost/km, variation, anomaly rules) | **Done** |
 | 4 | React + TypeScript dashboard | Pending |
 | 5 | Auth (Entra ID + RBAC) | Pending |
 | 6 | Azure deployment | Pending |
@@ -121,15 +96,34 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 
 This section catalogues work done with AI assistance, so the portfolio can show concrete time savings.
 
-| # | Commit / work | Manual estimate | With AI | Saved | Notes |
-|---|----------------|-----------------|---------|-------|-------|
-| 1 | Domain model alignment (Company, Vehicle, Driver, Trip, Fueling, Expense, Maintenance) | ~3–4 h | ~25 min | ~3 h | Entities + relationships + naming |
-| 2 | Feature-package restructure + DTOs + mappers | ~4–5 h | ~35 min | ~4 h | Full package move + Create/Update/Response records |
-| 3 | Services with business rules (distance, totalCost, company consistency) | ~3 h | ~25 min | ~2.5 h | Validation of inactive entities, same-company rule |
-| 4 | REST controllers + GlobalExceptionHandler (ProblemDetail) | ~2 h | ~15 min | ~1.75 h | Consistent API surface |
-| 5 | Local config (application.yml profiles) + docker-compose | ~1 h | ~10 min | ~50 min | PostgreSQL ready |
-| 6 | README + architecture decisions documentation | ~1.5 h | ~15 min | ~1.25 h | This file |
-| **Total Phase 1–2** | | **~14.5–16.5 h** | **~2 h** | **~12.5–14.5 h** | |
+|      Phase           |  Manual estimate   | With AI      | Saved            |  Notes
+
+
+| **Total Phase 1–2**  | **~14.5–16.5 h**   | **~2 h**     | **~12.5–14.5 h** | Domain, CRUDs, validation, docker
+
+| **Total Phase 3**    | **~6 h**           | **~1h 30min**| **~5.1 h**       | Fleet/vehicle metrics & anomalies (Fix docker and git problems)
+
+| **Total Phase 4**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 5**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 6**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 7**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 8**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 9**    | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 10**   | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 11**   | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 12**   | **~ h**            | **~ **       | **~**            |
+
+| **Total Phase 13**   | **~ h**            | **~ **       | **~**            |
+
+| **Grand Total**      | **~20.5–22.5 h**   | **~3 h 30m** | **~17.6–19.6 h** |
 
 Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept the structure consistent across seven features.
 
