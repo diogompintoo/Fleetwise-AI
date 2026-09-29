@@ -49,9 +49,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneric(Exception ex) {
+        ex.printStackTrace(); //  for debug
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred"
+                ex.getMessage()
         );
         problem.setTitle("Internal Server Error");
         problem.setProperty("timestamp", Instant.now());
