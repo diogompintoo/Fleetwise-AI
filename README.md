@@ -79,7 +79,7 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 | 1 | Database + domain model | **Done** |
 | 2 | Spring Boot REST API + business rules | **Done** |
 | 3 | Analytics (consumption, cost/km, variation, anomaly rules) | **Done** |
-| 4 | React + TypeScript dashboard | Pending |
+| 4 | Angular + TypeScript dashboard (migrated from React for enterprise stack) | **In Progress** |
 | 5 | Auth (Entra ID + RBAC) | Pending |
 | 6 | Azure deployment | Pending |
 | 7 | Blob Storage + document extraction | Pending |
@@ -94,7 +94,7 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 
 ## Development log – AI-assisted time tracking
 
-This section catalogues work done with AI assistance, so the portfolio can show concrete time savings.
+This section catalogues work done with AI assistance, so the portfolio can show concrete time savings. For detailed task-by-task execution logs (including the frontend migration to Angular), see [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.md).
 
 |      Phase           |  Manual estimate   | With AI      | Saved            |  Notes
 
@@ -103,27 +103,27 @@ This section catalogues work done with AI assistance, so the portfolio can show 
 
 | **Total Phase 3**    | **~6 h**           | **~1h 30min**| **~5.1 h**       | Fleet/vehicle metrics & anomalies (Fix docker and git problems)
 
-| **Total Phase 4**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 4**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 5**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 5**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 6**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 6**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 7**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 7**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 8**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 8**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 9**    | **~ h**            | **~ **       | **~**            |
+| **Total Phase 9**    | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 10**   | **~ h**            | **~ **       | **~**            |
+| **Total Phase 10**   | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 11**   | **~ h**            | **~ **       | **~**            |
+| **Total Phase 11**   | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 12**   | **~ h**            | **~ **       | **~**            |
+| **Total Phase 12**   | **~ h**            | **~ **       | **~**            | 
 
-| **Total Phase 13**   | **~ h**            | **~ **       | **~**            |
+| **Total Phase 13**   | **~ h**            | **~ **       | **~**            | 
 
-| **Grand Total**      | **~20.5–22.5 h**   | **~3 h 30m** | **~17.6–19.6 h** |
+| **Grand Total**      | **~20.5–22.5 h**   | **~3 h 30m** | **~17.6–19.6 h** | 
 
 Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept the structure consistent across seven features.
 
