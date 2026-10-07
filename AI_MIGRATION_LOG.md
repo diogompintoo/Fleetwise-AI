@@ -19,7 +19,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 |:---:|---|:---:|:---:|:---:|:---:|---|
 | **1–2** | Domain Model, Database, Spring Boot CRUDs & Validation | ~14.5–16.5 h | ~2.0 h | **~12.5–14.5 h** | **Completed** | Entities, DTOs, Bean Validation, Docker, RFC 7807 |
 | **3** | Analytics, Fleet/Vehicle Metrics & Anomaly Rules | ~6.0 h | ~1.5 h | **~4.5–5.1 h** | **Completed** | Consumption, cost/km, variance, Docker/Git fixes |
-| **4** | **Frontend Dashboard (Angular + TypeScript + Tailwind)** | **~14.0 h** | **~55m (to date)** | **~8h 35m (to date)** | **In Progress** | Strategic migration from React to Enterprise Angular |
+| **4** | **Frontend Dashboard (Angular + TypeScript + Tailwind)** | **~14.0 h** | **~1h 05m (to date)** | **~10h 55m (to date)** | **In Progress** | Strategic migration from React to Enterprise Angular |
 | **5** | Authentication & RBAC (Microsoft Entra ID) | ~8.0 h | — | — | Pending | Enterprise identity, JWT validation, role security |
 | **6** | Cloud Deployment (Azure Container Apps / App Service) | ~6.0 h | — | — | Pending | Infrastructure as Code, containerization, cloud config |
 | **7** | Document Storage & OCR Extraction (Azure Blob) | ~7.0 h | — | — | Pending | Fuel receipts / maintenance invoices ingestion |
@@ -29,7 +29,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **11** | CI/CD Pipelines (GitHub Actions) | ~4.0 h | — | — | Pending | Automated linting, test suites, multi-stage builds |
 | **12** | Observability (Azure App Insights) & Azure Key Vault | ~4.0 h | — | — | Pending | Telemetry, distributed tracing, secret management |
 | **13** | Technical Documentation & Portfolio Benchmark Report | ~4.0 h | ~0.5 h | **~3.5 h** | Ongoing | Live benchmark catalog, API specs, architecture guides |
-| **Total** | **FleetWise AI — Full Lifecycle** | **~90.5–93.0 h** | **~4h 45m (to date)** | **~25.8–28.0 h+** | In Progress | Massive delivery acceleration via Antigravity AI |
+| **Total** | **FleetWise AI — Full Lifecycle** | **~90.5–93.0 h** | **~4h 55m (to date)** | **~28.0–30.2 h+** | In Progress | Massive delivery acceleration via Antigravity AI |
 
 ---
 
@@ -44,8 +44,8 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **4.3** | Domain models & HTTP service layer (`HttpClient`, typed services, DI) | `frontend/src/app/models/*`, `frontend/src/app/services/*`, `frontend/src/app/app.config.ts` | ~2h 00m | ~10m | **~1h 50m** | Completed |
 | **4.4** | Application shell & navigation layout (Dark theme, sidebar, routing) | `frontend/src/app/app.ts`, `frontend/src/app/app.routes.ts`, `frontend/src/index.html`, pages scaffold | ~1h 30m | ~10m | **~1h 20m** | Completed |
 | **4.5** | Dashboard view (KPI metric cards, reactive Signals, fleet aggregations) | `frontend/src/app/pages/dashboard/dashboard.component.ts`, `frontend/tsconfig.app.json` | ~2h 00m | ~10m | **~1h 50m** | Completed |
-| **4.6** | Companies & Vehicles views (Data tables, state badges, loading states) | Companies and Vehicles components | ~2h 30m | TBD | TBD | Up Next |
-| **4.7** | Production build verification & end-to-end API integration | Build output, bundle analyzer, API wiring | ~1h 30m | TBD | TBD | Pending |
+| **4.6** | Companies & Vehicles views (Data tables, state badges, loading states) | `frontend/src/app/pages/companies/companies.component.ts`, `frontend/src/app/pages/vehicles/vehicles.component.ts` | ~2h 30m | ~10m | **~2h 20m** | Completed |
+| **4.7** | Production build verification & end-to-end API integration | Build output, bundle analyzer, API wiring | ~1h 30m | TBD | TBD | Up Next |
 
 ---
 
@@ -176,6 +176,25 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
   - **Time Saved:** **~1h 50m**.
 
 ---
+
+### [Task 4.6] Companies & Vehicles Views (Data Tables, State Badges & Observables)
+- **Date / Timestamp:** 2026-10-07
+- **Task Performed:** Migration of the Companies and Vehicles data views from React to Angular Standalone Components, implementing structured tables, date pipes, status badge pills, loading skeleton blocks, and error fallback handlers.
+- **Affected Files:**
+  - [`frontend/src/app/pages/companies/companies.component.ts`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/frontend/src/app/pages/companies/companies.component.ts)
+  - [`frontend/src/app/pages/vehicles/vehicles.component.ts`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/frontend/src/app/pages/vehicles/vehicles.component.ts)
+  - [`AI_MIGRATION_LOG.md`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/AI_MIGRATION_LOG.md)
+- **What Was Changed:**
+  - Implemented standalone `CompaniesComponent` using `DatePipe` for formatting ISO creation dates, table layout matching the dark Tailwind aesthetic, empty state display, and reactive `signals` for table state.
+  - Implemented standalone `VehiclesComponent` with monospace font formatting for license plates, fuel type pill chips, active/inactive status badges (emerald for active, red for inactive), empty state handling, and reactive `signals`.
+  - Added dedicated refresh actions and retry controls on both views to re-fetch live data from the backend.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~2h 30m (writing table markup, responsive styles, date pipe integration, status badge logic, animated skeleton states, and empty collection fallbacks).
+  - **With AI:** ~10m (rapid authoring of typed standalone components and clean templates).
+  - **Time Saved:** **~2h 20m**.
+
+---
+
 
 
 
