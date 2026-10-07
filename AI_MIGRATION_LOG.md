@@ -19,7 +19,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 |:---:|---|:---:|:---:|:---:|:---:|---|
 | **1–2** | Domain Model, Database, Spring Boot CRUDs & Validation | ~14.5–16.5 h | ~2.0 h | **~12.5–14.5 h** | **Completed** | Entities, DTOs, Bean Validation, Docker, RFC 7807 |
 | **3** | Analytics, Fleet/Vehicle Metrics & Anomaly Rules | ~6.0 h | ~1.5 h | **~4.5–5.1 h** | **Completed** | Consumption, cost/km, variance, Docker/Git fixes |
-| **4** | **Frontend Dashboard (Angular + TypeScript + Tailwind)** | **~14.0 h** | **~45m (to date)** | **~6h 45m (to date)** | **In Progress** | Strategic migration from React to Enterprise Angular |
+| **4** | **Frontend Dashboard (Angular + TypeScript + Tailwind)** | **~14.0 h** | **~55m (to date)** | **~8h 35m (to date)** | **In Progress** | Strategic migration from React to Enterprise Angular |
 | **5** | Authentication & RBAC (Microsoft Entra ID) | ~8.0 h | — | — | Pending | Enterprise identity, JWT validation, role security |
 | **6** | Cloud Deployment (Azure Container Apps / App Service) | ~6.0 h | — | — | Pending | Infrastructure as Code, containerization, cloud config |
 | **7** | Document Storage & OCR Extraction (Azure Blob) | ~7.0 h | — | — | Pending | Fuel receipts / maintenance invoices ingestion |
@@ -29,7 +29,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **11** | CI/CD Pipelines (GitHub Actions) | ~4.0 h | — | — | Pending | Automated linting, test suites, multi-stage builds |
 | **12** | Observability (Azure App Insights) & Azure Key Vault | ~4.0 h | — | — | Pending | Telemetry, distributed tracing, secret management |
 | **13** | Technical Documentation & Portfolio Benchmark Report | ~4.0 h | ~0.5 h | **~3.5 h** | Ongoing | Live benchmark catalog, API specs, architecture guides |
-| **Total** | **FleetWise AI — Full Lifecycle** | **~90.5–93.0 h** | **~4h 35m (to date)** | **~23.9–26.1 h+** | In Progress | Massive delivery acceleration via Antigravity AI |
+| **Total** | **FleetWise AI — Full Lifecycle** | **~90.5–93.0 h** | **~4h 45m (to date)** | **~25.8–28.0 h+** | In Progress | Massive delivery acceleration via Antigravity AI |
 
 ---
 
@@ -43,8 +43,8 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **4.2** | Angular scaffolding, Dev Proxy (port 8081) & Tailwind CSS v4 setup | `frontend/proxy.conf.json`, `frontend/angular.json`, `frontend/src/styles.css`, `frontend/.postcssrc.json` | ~2h 30m | ~15m | **~2h 15m** | Completed |
 | **4.3** | Domain models & HTTP service layer (`HttpClient`, typed services, DI) | `frontend/src/app/models/*`, `frontend/src/app/services/*`, `frontend/src/app/app.config.ts` | ~2h 00m | ~10m | **~1h 50m** | Completed |
 | **4.4** | Application shell & navigation layout (Dark theme, sidebar, routing) | `frontend/src/app/app.ts`, `frontend/src/app/app.routes.ts`, `frontend/src/index.html`, pages scaffold | ~1h 30m | ~10m | **~1h 20m** | Completed |
-| **4.5** | Dashboard view (KPI metric cards, reactive Signals, fleet aggregations) | Dashboard component & reactive logic | ~2h 00m | TBD | TBD | Up Next |
-| **4.6** | Companies & Vehicles views (Data tables, state badges, loading states) | Companies and Vehicles components | ~2h 30m | TBD | TBD | Pending |
+| **4.5** | Dashboard view (KPI metric cards, reactive Signals, fleet aggregations) | `frontend/src/app/pages/dashboard/dashboard.component.ts`, `frontend/tsconfig.app.json` | ~2h 00m | ~10m | **~1h 50m** | Completed |
+| **4.6** | Companies & Vehicles views (Data tables, state badges, loading states) | Companies and Vehicles components | ~2h 30m | TBD | TBD | Up Next |
 | **4.7** | Production build verification & end-to-end API integration | Build output, bundle analyzer, API wiring | ~1h 30m | TBD | TBD | Pending |
 
 ---
@@ -149,6 +149,34 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
   - **Time Saved:** **~1h 20m**.
 
 ---
+
+### [Task 4.5] Dashboard View & Reactive Signals Aggregation (KPIs & Fleet Metrics)
+- **Date / Timestamp:** 2026-10-07
+- **Task Performed:** Full migration of the React Dashboard view to modern Angular standalone architecture utilizing Angular Signals (`signal`, `computed`) for reactive KPI calculations, concurrent multi-resource data loading with `forkJoin`, error handling, and visual alignment with the Section 28 project architecture vision. Also resolved TypeScript 6 `rootDir` compiler specification in `tsconfig.app.json`.
+- **Affected Files:**
+  - [`frontend/src/app/pages/dashboard/dashboard.component.ts`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/frontend/src/app/pages/dashboard/dashboard.component.ts)
+  - [`frontend/tsconfig.app.json`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/frontend/tsconfig.app.json)
+  - [`AI_MIGRATION_LOG.md`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/AI_MIGRATION_LOG.md)
+- **What Was Changed:**
+  - Injected all 4 typed services (`CompanyService`, `VehicleService`, `TripService`, `FuelingService`) with Angular's `inject()`.
+  - Replaced TanStack Query hooks with native reactive Signals: `companies`, `vehicles`, `trips`, `fuelings`, `isLoading`, and `errorMessage`.
+  - Implemented reactive `computed()` signals to compute business rules:
+    - Total Distance (`totalKm`): sum of all recorded trip distances.
+    - Total Fuel Spend (`totalFuelCost`): sum of all fueling records.
+    - Total Fuel Volume (`totalLiters`): cumulative liters pumped.
+    - Average Consumption (`avgConsumption`): `(liters / km) * 100` L/100km (aligned with Section 7 of the project vision).
+    - Cost per Kilometer (`costPerKm`): `fuelCost / km` in €/km.
+    - Formatted statistics cards array with tenant, vehicle, and trip counts.
+  - Implemented modern Angular control flow (`@if`, `@for`) with loading skeleton cards and explicit error alert state with Retry capability.
+  - Added an AI Fleet Insights preview card directly reflecting Section 28 of the project architecture vision.
+  - Fixed TypeScript 6 migration error in [`tsconfig.app.json`](file:///home/diogo/Documentos/fleetWiseAi/Fleetwise-AI/frontend/tsconfig.app.json) by explicitly configuring `"rootDir": "./src"`.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~2h 00m (migrating from TanStack Query hooks to Angular Signals & `computed`, composing reactive state with `forkJoin`, writing loading skeletons, error fallback, formatting currency/numbers, and styling KPI cards with dark Tailwind CSS).
+  - **With AI:** ~10m (instant generation of idiomatic reactive Signals, computed statistics, template control flow, and error states).
+  - **Time Saved:** **~1h 50m**.
+
+---
+
 
 
 
