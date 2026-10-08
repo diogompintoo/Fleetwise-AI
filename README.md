@@ -79,7 +79,7 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 | 1 | Database + domain model | **Done** |
 | 2 | Spring Boot REST API + business rules | **Done** |
 | 3 | Analytics (consumption, cost/km, variation, anomaly rules) | **Done** |
-| 4 | Angular + TypeScript dashboard (migrated from React for enterprise stack) | **In Progress** |
+| 4 | Angular + TypeScript dashboard (migrated from React for enterprise stack) | **Done** |
 | 5 | Auth (Entra ID + RBAC) | Pending |
 | 6 | Azure deployment | Pending |
 | 7 | Blob Storage + document extraction | Pending |
@@ -103,7 +103,7 @@ This section catalogues work done with AI assistance, so the portfolio can show 
 
 | **Total Phase 3**    | **~6 h**           | **~1h 30min**| **~5.1 h**       | Fleet/vehicle metrics & anomalies (Fix docker and git problems)
 
-| **Total Phase 4**    | **~ h**            | **~ **       | **~**            | 
+| **Total Phase 4**    | **~13.5–14.0 h**   | **~1h 15min**| **~12.2–12.7 h** | Enterprise Angular migration (Signals, DI, HttpClient, Tailwind)
 
 | **Total Phase 5**    | **~ h**            | **~ **       | **~**            | 
 
@@ -123,7 +123,7 @@ This section catalogues work done with AI assistance, so the portfolio can show 
 
 | **Total Phase 13**   | **~ h**            | **~ **       | **~**            | 
 
-| **Grand Total**      | **~20.5–22.5 h**   | **~3 h 30m** | **~17.6–19.6 h** | 
+| **Grand Total (Phases 1–4)** | **~34.0–36.5 h**   | **~4 h 45m** | **~29.2–31.7 h** | Domain, CRUDs, Docker, metrics & Angular enterprise frontend 
 
 Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept the structure consistent across seven features.
 
