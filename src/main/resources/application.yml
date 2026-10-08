@@ -29,6 +29,18 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
+
+security:
+    jwt:
+      secret: fleetwiseai-super-secret-key-256bits-minimum-required-here
+      expiration: 86400000
+
+
+logging:
+  level:
+    com.fleetwise: DEBUG
+    org.springframework.web: DEBUG     
+
 ---
 spring:
   config:
