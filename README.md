@@ -22,21 +22,34 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 
 ## Stack
 
-| Layer                  | Technology                                               |
-|------------------------|----------------------------------------------------------|
-| Language               | Java 21                                                  |
-| Framework              | Spring Boot 3.4                                          |
-| API                    | Spring Web (REST)                                        |
-| Persistence            | Spring Data JPA + Hibernate                              |
-| Validation             | Bean Validation                                          |
-| Security               | Spring Security (open in Phase 1; Entra ID later)        |
-| Frontend               | Angular (Standalone Components + Signals) + Tailwind CSS |
-| Database (local)       | PostgreSQL 16                                            |
-| Database (prod target) | Azure SQL                                                |
-| Build                  | Maven                                                    |
+| Layer                  | Technology                                                 |
+|------------------------|------------------------------------------------------------|
+| Language               | Java 21                                                    |
+| Framework              | Spring Boot 3.4                                            |
+| API                    | Spring Web (REST)                                          |
+| Persistence            | Spring Data JPA + Hibernate                                |
+| Validation             | Bean Validation                                            |
+| Security               | Spring Security + JWT demo authentication (Entra ID later) |
+| Frontend               | Angular (Standalone Components + Signals) + Tailwind CSS   |
+| Database (local)       | PostgreSQL 16                                              |
+| Database (prod target) | Azure SQL                                                  |
+| Build                  | Maven                                                      |
 
 ## Project structure (feature / domain oriented)
 
+com.fleetwise
+├── auth                JWT login, JwtService, filter, demo users
+├── common
+│   ├── config          SecurityConfig
+│   └── exception       ResourceNotFound, BusinessRule, GlobalExceptionHandler
+├── company
+├── vehicle
+├── driver
+├── trip
+├── fueling
+├── expense
+├── maintenance
+└── analytics
 
 
 ## Key engineering decisions
@@ -56,41 +69,46 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 5. **Feature packages**  
    Ready for analytics, AI and reporting without restructuring.
 
+6. **JWT authentication (Phase 5 foundation)**  
+   Stateless bearer-token auth with in-memory demo users (`ADMIN`, `FLEET_MANAGER`, `DRIVER`). Role claims are present; fine-grained RBAC and Entra ID are still pending.
+
 ## API overview
 
-| Resource     | Base path                |
-|--------------|--------------------------|
-| Companies    | `/api/v1/companies`      |
-| Vehicles     | `/api/v1/vehicles`       |
-| Drivers      | `/api/v1/drivers`        |
-| Trips        | `/api/v1/trips`          |
-| Fuelings     | `/api/v1/fuelings`       |
-| Expenses     | `/api/v1/expenses`       |
-| Maintenances | `/api/v1/maintenances`   |
-| Analytics    | `/api/v1/analytics`      |
+| Resource       | Base path                 |
+|----------------|---------------------------|
+| Authentication | `POST /api/v1/auth/login` |
+| Companies      | `/api/v1/companies`       |
+| Vehicles       | `/api/v1/vehicles`        |
+| Drivers        | `/api/v1/drivers`         |
+| Trips          | `/api/v1/trips`           |
+| Fuelings       | `/api/v1/fuelings`        |
+| Expenses       | `/api/v1/expenses`        |
+| Maintenances   | `/api/v1/maintenances`    |
+| Analytics      | `/api/v1/analytics`       |
 
-All support standard CRUD. List endpoints accept optional filters (`companyId`, `vehicleId`).
+All domain endpoints require a valid bearer token. List endpoints accept optional filters (`companyId`, `vehicleId`).  
+Current login uses in-memory demo users (not production identity management).
 
 ---
 
 ## Roadmap
 
-| Phase | Scope                                                       | Status   |
-|-------|-------------------------------------------------------------|----------|
-| 0     | Product definition                                          | Done     |
-| 1     | Database + domain model                                     | **Done** |
-| 2     | Spring Boot REST API + business rules                       | **Done** |
-| 3     | Analytics (consumption, cost/km, variation, anomaly rules)  | **Done** |
-| 4     | Angular dashboard (KPIs, tables, Signals, Tailwind)         | **Done** |
-| 5     | Authentication (JWT / Entra ID + RBAC)                      | Next     |
-| 6     | Azure deployment                                            | Planned  |
-| 7     | Blob Storage + document extraction                          | Planned  |
-| 8     | AI assistant (insights, “why?”, natural language questions) | Planned  |
-| 9     | Anomaly detection (rules → ML)                              | Planned  |
-| 10    | AI monthly reports (PDF)                                    | Planned  |
-| 11    | CI/CD (GitHub Actions)                                      | Planned  |
-| 12    | Monitoring (App Insights) + Key Vault                       | Planned  |
-| 13    | Documentation                                               | Ongoing  |
+| Phase | Scope                                                       | Status      |
+|-------|-------------------------------------------------------------|-------------|
+| 0     | Product definition                                          | Done        |
+| 1     | Database + domain model                                     | **Done**    |
+| 2     | Spring Boot REST API + business rules                       | **Done**    |
+| 3     | Analytics (consumption, cost/km, variation, anomaly rules)  | **Done**    |
+| 4     | Angular dashboard (KPIs, tables, Signals, Tailwind)         | **Done**    |
+| 5     | JWT login foundation; Entra ID integration + RBAC           | **In progress** |
+| 6     | Azure deployment                                            | Planned     |
+| 7     | Blob Storage + document extraction                          | Planned     |
+| 8     | AI assistant (insights, “why?”, natural language questions) | Planned     |
+| 9     | Anomaly detection (rules → ML)                              | Planned     |
+| 10    | AI monthly reports (PDF)                                    | Planned     |
+| 11    | CI/CD (GitHub Actions)                                      | Planned     |
+| 12    | Monitoring (App Insights) + Key Vault                       | Planned     |
+| 13    | Documentation                                               | Ongoing     |
 
 ---
 
@@ -98,12 +116,13 @@ All support standard CRUD. List endpoints accept optional filters (`companyId`, 
 
 Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.md).
 
-| Phase     | Manual estimate | With AI     | Saved          | Notes                                      |
-|-----------|-----------------|-------------|----------------|--------------------------------------------|
-| 1–2       | ~14.5–16.5 h    | ~2 h        | ~12.5–14.5 h   | Domain, CRUDs, validation, Docker          |
-| 3         | ~6 h            | ~1h 30min   | ~4.5–5.1 h     | Fleet/vehicle metrics & anomaly rules      |
-| 4         | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h   | Enterprise Angular (Signals, DI, Tailwind) |
-| **Total** | **~34–36.5 h**  | **~4h 45m** | **~29–31.7 h** | Backend + Analytics + Angular dashboard    |
+| Phase     | Manual estimate | With AI     | Saved          | Notes                                           |
+|-----------|-----------------|-------------|----------------|-------------------------------------------------|
+| 1–2       | ~14.5–16.5 h    | ~2 h        | ~12.5–14.5 h   | Domain, CRUDs, validation, Docker               |
+| 3         | ~6 h            | ~1h 30min   | ~4.5–5.1 h     | Fleet/vehicle metrics & anomaly rules           |
+| 4         | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h   | Enterprise Angular (Signals, DI, Tailwind)      |
+| 5 (partial)| ~8.0 h         | TBD         | TBD            | JWT login foundation (Entra ID + RBAC pending)  |
+| **Total** | **~34–36.5 h+** | **~4h 45m+**| **~29–31.7 h+**| Backend + Analytics + Angular + Auth foundation |
 
 Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept structure consistent across features.
 

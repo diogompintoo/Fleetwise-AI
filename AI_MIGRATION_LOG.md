@@ -15,21 +15,21 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 
 ## 📊 Global Project Benchmark Table (Phases 1 to 13)
 
-| Phase | Scope / Milestone | Manual Estimate | With AI | Time Saved | Status | Notes |
-|:---:|---|:---:|:---:|:---:|:---:|---|
-| **1–2** | Domain Model, Database, Spring Boot CRUDs & Validation | ~14.5–16.5 h | ~2.0 h | **~12.5–14.5 h** | **Completed** | Entities, DTOs, Bean Validation, Docker, RFC 7807 |
-| **3** | Analytics, Fleet/Vehicle Metrics & Anomaly Rules | ~6.0 h | ~1.5 h | **~4.5–5.1 h** | **Completed** | Consumption, cost/km, variance, Docker/Git fixes |
-| **4** | **Frontend Dashboard (Angular + TypeScript + Tailwind)** | **~13.5–14.0 h** | **~1h 15m** | **~12.2–12.7 h** | **Completed** | Full migration from React to Enterprise Angular (Signals & DI) |
-| **5** | Authentication & RBAC (Microsoft Entra ID) | ~8.0 h | — | — | Pending | Enterprise identity, JWT validation, role security |
-| **6** | Cloud Deployment (Azure Container Apps / App Service) | ~6.0 h | — | — | Pending | Infrastructure as Code, containerization, cloud config |
-| **7** | Document Storage & OCR Extraction (Azure Blob) | ~7.0 h | — | — | Pending | Fuel receipts / maintenance invoices ingestion |
-| **8** | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries) | ~10.0 h | — | — | Pending | Generative fleet intelligence & contextual query layer |
-| **9** | Advanced Anomaly Detection (Statistical / ML) | ~8.0 h | — | — | Pending | Evolving rule-based heuristics into predictive models |
-| **10** | Monthly Automated Reports (Executive PDF / Excel Export) | ~5.0 h | — | — | Pending | Automated report generation engine |
-| **11** | CI/CD Pipelines (GitHub Actions) | ~4.0 h | — | — | Pending | Automated linting, test suites, multi-stage builds |
-| **12** | Observability (Azure App Insights) & Azure Key Vault | ~4.0 h | — | — | Pending | Telemetry, distributed tracing, secret management |
-| **13** | Technical Documentation & Portfolio Benchmark Report | ~4.0 h | ~0.5 h | **~3.5 h** | Ongoing | Live benchmark catalog, API specs, architecture guides |
-| **Total** | **FleetWise AI — Full Lifecycle** | **~90.5–93.0 h** | **~5h 05m (to date)** | **~29.2–31.7 h+** | In Progress | Massive delivery acceleration via Antigravity AI |
+| Phase     | Scope / Milestone                                            | Manual Estimate | With AI              | Time Saved        | Status      | Notes                                                                               |
+|-----------|--------------------------------------------------------------|-----------------|----------------------|-------------------|-------------|-------------------------------------------------------------------------------------|
+| **1–2**   | Domain Model, Database, Spring Boot CRUDs & Validation       | ~14.5–16.5 h    | ~2.0 h               | **~12.5–14.5 h**  | **Completed** | Entities, DTOs, Bean Validation, Docker, RFC 7807                                   |
+| **3**     | Analytics, Fleet/Vehicle Metrics & Anomaly Rules             | ~6.0 h          | ~1.5 h               | **~4.5–5.1 h**    | **Completed** | Consumption, cost/km, variance, Docker/Git fixes                                    |
+| **4**     | Frontend Dashboard (Angular + TypeScript + Tailwind)         | ~13.5–14.0 h    | **~1h 15m**          | **~12.2–12.7 h**  | **Completed** | Full migration from React to Enterprise Angular (Signals & DI)                      |
+| **5**     | JWT login foundation; Entra ID & RBAC                        | ~8.0 h          | TBD                  | TBD               | **In progress** | Demo JWT login implemented; production identity and role-based authorization remain |
+| **6**     | Cloud Deployment (Azure Container Apps / App Service)        | ~6.0 h          | —                    | —                 | Pending     | Infrastructure as Code, containerization, cloud config                              |
+| **7**     | Document Storage & OCR Extraction (Azure Blob)               | ~7.0 h          | —                    | —                 | Pending     | Fuel receipts / maintenance invoices ingestion                                      |
+| **8**     | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries) | ~10.0 h         | —                    | —                 | Pending     | Generative fleet intelligence & contextual query layer                              |
+| **9**     | Advanced Anomaly Detection (Statistical / ML)                | ~8.0 h          | —                    | —                 | Pending     | Evolving rule-based heuristics into predictive models                               |
+| **10**    | Monthly Automated Reports (Executive PDF / Excel Export)     | ~5.0 h          | —                    | —                 | Pending     | Automated report generation engine                                                  |
+| **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h          | —                    | —                 | Pending     | Automated linting, test suites, multi-stage builds                                  |
+| **12**    | Observability (Azure App Insights) & Azure Key Vault         | ~4.0 h          | —                    | —                 | Pending     | Telemetry, distributed tracing, secret management                                   |
+| **13**    | Technical Documentation & Portfolio Benchmark Report         | ~4.0 h          | ~0.5 h               | **~3.5 h**        | Ongoing     | Live benchmark catalog, API specs, architecture guides                              |
+| **Total** | **FleetWise AI — Full Lifecycle**                            | **~90.5–93.0 h**| **~5h 05m (to date)**| **~29.2–31.7 h+** | In Progress | Massive delivery acceleration via Antigravity AI                                    |
 
 ---
 
@@ -213,6 +213,41 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 
 ---
 
+## Phase 5 Breakdown: Authentication & Authorization
+
+- **Date / Timestamp:** 2026-10-08
+- **Task Performed:** Added the first end-to-end login foundation: a Spring Security login endpoint that authenticates demo users and issues JWTs, plus an Angular login page, client-side route guard, bearer-token interceptor, and logout action.
+- **Affected Files:**
+  - `src/main/java/com/fleetwise/auth/AuthController.java`
+  - `src/main/java/com/fleetwise/auth/AuthService.java`
+  - `src/main/java/com/fleetwise/auth/security/JwtService.java`
+  - `src/main/java/com/fleetwise/auth/security/JwtAuthFilter.java`
+  - `src/main/java/com/fleetwise/auth/security/UserDetailsServiceImpl.java`
+  - `src/main/java/com/fleetwise/common/config/SecurityConfig.java`
+  - `frontend/src/app/app.config.ts`
+  - `frontend/src/app/app.routes.ts`
+  - `frontend/src/app/app.ts`
+  - `frontend/src/app/guards/auth.guard.ts`
+  - `frontend/src/app/interceptors/auth.interceptor.ts`
+  - `frontend/src/app/pages/login/login.component.ts`
+  - `frontend/src/app/services/auth.service.ts`
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - Added `POST /api/v1/auth/login`, BCrypt-backed authentication, JWT issuance, and stateless bearer-token validation for protected API routes.
+  - Added Angular login/logout flow, route protection, and automatic bearer-token attachment to API requests.
+  - Configured three in-memory demo identities with `ADMIN`, `FLEET_MANAGER`, and `DRIVER` authorities.
+  - Roles are included in the login response and JWT; fine-grained authorization rules, Microsoft Entra ID, persistent user management, and production-ready secret configuration remain outstanding.
+- **Verification:**
+  - `cd frontend && npm run build` completed successfully.
+  - Backend tests could not be run: the Maven wrapper configuration file `.mvn/wrapper/maven-wrapper.properties` is missing.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~3h 00m – 4h 00m (SecurityConfig, JWT filter/service, demo users, Angular login + guard + interceptor).
+  - **With AI:** TBD (to be recorded).
+  - **Time Saved:** TBD.
+
+---
+
 ## 🏆 Phase 4 Summary: React to Enterprise Angular Migration
 
 - **Total Manual Engineering Estimate:** **~13.5–14.0 hours**
@@ -225,7 +260,6 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
   - Dark-mode responsive UI matching the project design system in Tailwind CSS.
   - Zero-CORS development proxy forwarding to Spring Boot on port 8081.
   - Full parity with legacy React prototype plus enhanced resilience (skeletons, error retries, and AI insights preview).
-
 
 
 
