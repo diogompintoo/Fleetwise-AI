@@ -5,6 +5,8 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 > Portfolio project focused on demonstrating **how AI assists software development**  
 > (time savings, architecture decisions, clean domain design).
 
+---
+
 ## Screenshots
 
 ### Dashboard
@@ -34,20 +36,6 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 | Build                  | Maven                                                    |
 
 ## Project structure (feature / domain oriented)
-
-
-com.fleetwise
-├── common
-│   ├── config          SecurityConfig
-│   └── exception       ResourceNotFound, BusinessRule, GlobalExceptionHandler
-├── company
-├── vehicle
-├── driver
-├── trip
-├── fueling
-├── expense
-├── maintenance
-└── analytics
 
 
 
