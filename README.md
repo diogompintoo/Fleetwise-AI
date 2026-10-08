@@ -5,6 +5,17 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 > Portfolio project focused on demonstrating **how AI assists software development**  
 > (time savings, architecture decisions, clean domain design).
 
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/screenshot1.png)
+
+### Companies
+![Companies](screenshots/screenshot2.png)
+
+### Vehicles
+![Vehicles](screenshots/screenshot3.png)
+
 ---
 
 ## Stack
