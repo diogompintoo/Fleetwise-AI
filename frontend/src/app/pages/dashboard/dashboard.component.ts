@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { forkJoin, of, catchError } from 'rxjs';
 import { CompanyService, VehicleService, TripService, FuelingService } from '../../services';
 import { Company, Vehicle, Trip, Fueling } from '../../models';
+import { AnalyticsService, Insight } from '../../services/analytics.service';
 
 interface StatCard {
   label: string;
@@ -71,7 +72,7 @@ interface StatCard {
           }
         </div>
 
-        <!-- AI Insights & Architecture Preview (Aligned with Project Vision) -->
+        <!-- AI Fleet Insights -->
         <div class="bg-gradient-to-r from-gray-900 via-gray-900 to-blue-950/40 border border-gray-800 rounded-xl p-6">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
@@ -79,31 +80,32 @@ interface StatCard {
               <h3 class="text-lg font-semibold text-white">AI Fleet Insights</h3>
             </div>
             <span class="text-xs text-blue-400 bg-blue-950 border border-blue-800 px-2.5 py-1 rounded-full">
-              Phase 8 / 9 Preview
+              Rule-based · Phase 8
             </span>
           </div>
 
-          <div class="space-y-3 text-sm">
-            <div class="bg-gray-950/70 border border-gray-800/80 rounded-lg p-3.5 flex items-start gap-3">
-              <span class="text-emerald-400">✓</span>
-              <div>
-                <p class="text-gray-200 font-medium">Efficiency Baseline</p>
-                <p class="text-gray-400 text-xs mt-0.5">
-                  Average fleet fuel consumption is currently {{ avgConsumption().toFixed(2) }} L/100km across all registered trips.
-                </p>
-              </div>
+          @if (insightsLoading()) {
+            <div class="space-y-3 animate-pulse">
+              <div class="h-16 bg-gray-950/70 border border-gray-800 rounded-lg"></div>
+              <div class="h-16 bg-gray-950/70 border border-gray-800 rounded-lg"></div>
             </div>
-
-            <div class="bg-gray-950/70 border border-gray-800/80 rounded-lg p-3.5 flex items-start gap-3">
-              <span class="text-amber-400">ℹ</span>
-              <div>
-                <p class="text-gray-200 font-medium">Cost Indicator</p>
-                <p class="text-gray-400 text-xs mt-0.5">
-                  Fleet operational fuel cost is estimated at €{{ costPerKm().toFixed(3) }}/km.
-                </p>
-              </div>
+          } @else if (insights().length === 0) {
+            <p class="text-gray-400 text-sm">No insights available for the current period.</p>
+          } @else {
+            <div class="space-y-3 text-sm">
+              @for (insight of insights(); track insight.title) {
+                <div class="bg-gray-950/70 border border-gray-800/80 rounded-lg p-3.5 flex items-start gap-3">
+                  <span [class]="severityIconClass(insight.severity)">
+                    {{ severityIcon(insight.severity) }}
+                  </span>
+                  <div>
+                    <p class="text-gray-200 font-medium">{{ insight.title }}</p>
+                    <p class="text-gray-400 text-xs mt-0.5">{{ insight.message }}</p>
+                  </div>
+                </div>
+              }
             </div>
-          </div>
+          }
         </div>
       }
     </div>
@@ -114,7 +116,7 @@ export class DashboardComponent implements OnInit {
   private readonly vehicleService = inject(VehicleService);
   private readonly tripService = inject(TripService);
   private readonly fuelingService = inject(FuelingService);
-
+  private readonly analyticsService = inject(AnalyticsService);
   // Reactive State Signals
   readonly companies = signal<Company[]>([]);
   readonly vehicles = signal<Vehicle[]>([]);
@@ -122,6 +124,8 @@ export class DashboardComponent implements OnInit {
   readonly fuelings = signal<Fueling[]>([]);
   readonly isLoading = signal<boolean>(true);
   readonly errorMessage = signal<string | null>(null);
+  readonly insights = signal<Insight[]>([]);
+  readonly insightsLoading = signal(false);
 
   // Computed Aggregations
   readonly totalKm = computed(() =>
@@ -179,13 +183,14 @@ export class DashboardComponent implements OnInit {
     },
   ]);
 
-  ngOnInit(): void {
+    ngOnInit(): void {
     this.loadDashboardData();
   }
 
   loadDashboardData(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
+    this.loadInsights();   // ← correto
 
     forkJoin({
       companies: this.companyService.findAll().pipe(catchError(() => of([]))),
@@ -205,5 +210,42 @@ export class DashboardComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  private loadInsights(): void {
+    const to = new Date();
+    const from = new Date();
+    from.setDate(to.getDate() - 30);
+
+    const fromStr = from.toISOString().slice(0, 10);
+    const toStr = to.toISOString().slice(0, 10);
+
+    this.insightsLoading.set(true);
+    this.analyticsService.getInsights(fromStr, toStr).subscribe({
+      next: (data) => {
+        this.insights.set(data || []);
+        this.insightsLoading.set(false);
+      },
+      error: () => {
+        this.insights.set([]);
+        this.insightsLoading.set(false);
+      }
+    });
+  }
+
+  severityIcon(severity: string): string {
+    switch (severity) {
+      case 'CRITICAL': return '⚠';
+      case 'WARNING':  return 'ℹ';
+      default:         return '✓';
+    }
+  }
+
+  severityIconClass(severity: string): string {
+    switch (severity) {
+      case 'CRITICAL': return 'text-red-400';
+      case 'WARNING':  return 'text-amber-400';
+      default:         return 'text-emerald-400';
+    }
   }
 }

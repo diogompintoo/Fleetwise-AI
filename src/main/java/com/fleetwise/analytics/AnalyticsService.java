@@ -139,7 +139,99 @@ public class AnalyticsService {
         return anomalies;
     }
 
-    // ---------- formulas ----------
+   public List<InsightResponse> generateInsights(LocalDate from, LocalDate to) {
+    validatePeriod(from, to);
+
+    List<InsightResponse> insights = new ArrayList<>();
+
+    FleetAnalyticsResponse fleet = getFleetAnalytics(from, to);
+    List<AnomalyResponse> anomalies = detectAnomalies(from, to, BigDecimal.valueOf(15));
+
+    // 1. Fleet efficiency
+    if (fleet.averageConsumption() != null) {
+        insights.add(new InsightResponse(
+                "INFO",
+                "EFFICIENCY",
+                "Fleet efficiency baseline",
+                "Average fleet fuel consumption is "
+                        + fleet.averageConsumption().setScale(2, ROUNDING)
+                        + " L/100km for the selected period."
+        ));
+    }
+
+    // 2. Cost per km
+    if (fleet.costPerKm() != null) {
+        insights.add(new InsightResponse(
+                "INFO",
+                "COST",
+                "Operating cost indicator",
+                "Current fleet fuel cost is €"
+                        + fleet.costPerKm().setScale(3, ROUNDING)
+                        + " per kilometre."
+        ));
+    }
+
+    // 3. Cost variation
+    if (fleet.costVariation() != null && fleet.costVariation().variationPercent() != null) {
+        BigDecimal pct = fleet.costVariation().variationPercent();
+        String direction = pct.compareTo(BigDecimal.ZERO) >= 0 ? "increased" : "decreased";
+        String severity = pct.abs().compareTo(BigDecimal.valueOf(10)) > 0 ? "WARNING" : "INFO";
+
+        insights.add(new InsightResponse(
+                severity,
+                "COST",
+                "Fuel cost trend",
+                "Total fuel cost " + direction + " by "
+                        + pct.abs().setScale(1, ROUNDING)
+                        + "% compared to the previous period."
+        ));
+    }
+
+    // 4. Anomalies
+    if (!anomalies.isEmpty()) {
+        insights.add(new InsightResponse(
+                anomalies.size() >= 3 ? "CRITICAL" : "WARNING",
+                "ANOMALY",
+                "Consumption anomalies detected",
+                anomalies.size() + " vehicle(s) show consumption variation above the 15% threshold."
+        ));
+
+        AnomalyResponse top = anomalies.get(0);
+        insights.add(new InsightResponse(
+                "WARNING",
+                "ANOMALY",
+                "Highest deviation: " + top.licensePlate(),
+                top.message()
+        ));
+    } else {
+        insights.add(new InsightResponse(
+                "INFO",
+                "ANOMALY",
+                "No significant anomalies",
+                "No vehicles exceeded the 15% consumption variation threshold in this period."
+        ));
+    }
+
+    // 5. Distance variation
+    if (fleet.distanceVariation() != null && fleet.distanceVariation().variationPercent() != null) {
+        BigDecimal pct = fleet.distanceVariation().variationPercent();
+        String direction = pct.compareTo(BigDecimal.ZERO) >= 0 ? "up" : "down";
+        int distance = fleet.totalDistanceKm() != null ? fleet.totalDistanceKm() : 0;
+
+        insights.add(new InsightResponse(
+                "INFO",
+                "FLEET",
+                "Activity level",
+                "Total distance driven is " + direction + " "
+                        + pct.abs().setScale(1, ROUNDING)
+                        + "% versus the previous period ("
+                        + distance + " km)."
+        ));
+    }
+
+    return insights;
+} 
+
 
     /** L/100km = (liters / km) * 100 */
     BigDecimal calculateConsumption(BigDecimal liters, int distanceKm) {

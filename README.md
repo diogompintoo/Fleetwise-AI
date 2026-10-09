@@ -104,7 +104,7 @@ Current login uses in-memory demo users (not production identity management).
 | 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
 | 6     | Azure deployment                                            | Planned     |
 | 7     | Blob Storage + document extraction                          | Planned     |
-| 8     | AI assistant (insights, “why?”, natural language questions) | Planned     |
+| 8     | AI assistant (insights, “why?”, natural language questions) | **In progress** |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
 | 10    | AI monthly reports (PDF)                                    | Planned     |
 | 11    | CI/CD (GitHub Actions)                                      | Planned     |
@@ -123,7 +123,8 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 3          | ~6 h            | ~1h 30min   | ~4.5–5.1 h       | Fleet/vehicle metrics & anomaly rules              |
 | 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
 | 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
-| **Total**  | **~42–44.5 h**  | **~6h 15m** | **~36–38 h**     | Backend + Analytics + Angular + Auth foundation    |
+| 8 (partial)| ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Rule-based AI Fleet Insights (LLM still pending)   |
+| **Total**  | **~52–54.5 h**  | **~7h 15m** | **~44.7–47.8 h** | Backend + Analytics + Angular + Auth foundation    |
 
 Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept structure consistent across features.
 

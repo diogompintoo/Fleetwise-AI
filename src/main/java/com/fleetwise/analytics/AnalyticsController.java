@@ -2,6 +2,7 @@ package com.fleetwise.analytics;
 
 import com.fleetwise.analytics.dto.AnomalyResponse;
 import com.fleetwise.analytics.dto.FleetAnalyticsResponse;
+import com.fleetwise.analytics.dto.InsightResponse;
 import com.fleetwise.analytics.dto.VehicleAnalyticsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,5 +45,13 @@ public class AnalyticsController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(defaultValue = "15") BigDecimal threshold) {
         return ResponseEntity.ok(analyticsService.detectAnomalies(from, to, threshold));
+    }
+
+    @GetMapping("/insights")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
+    public ResponseEntity<List<InsightResponse>> insights(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+        return ResponseEntity.ok(analyticsService.generateInsights(from, to));
     }
 }
