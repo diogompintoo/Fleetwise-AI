@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<VehicleResponse>> findAll(
             @RequestParam(required = false) Long companyId) {
         if (companyId != null) {
@@ -28,16 +30,19 @@ public class VehicleController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<VehicleResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(vehicleService.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<VehicleResponse> create(@Valid @RequestBody CreateVehicleRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(vehicleService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<VehicleResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateVehicleRequest request) {
@@ -45,8 +50,10 @@ public class VehicleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         vehicleService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

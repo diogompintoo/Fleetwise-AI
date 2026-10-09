@@ -23,6 +23,28 @@ export class AuthService {
   readonly role = computed(() => this._role());
   readonly token = computed(() => this._token());
 
+  private normalizedRole(): string | null {
+    const r = this._role();
+    return r ? r.replace(/^ROLE_/, '') : null;
+  }
+
+  hasAnyRole(...roles: string[]): boolean {
+    const current = this.normalizedRole();
+    return !!current && roles.includes(current);
+  }
+
+  isAdmin(): boolean {
+    return this.hasAnyRole('ADMIN');
+  }
+
+  isManagerOrAdmin(): boolean {
+    return this.hasAnyRole('ADMIN', 'FLEET_MANAGER');
+  }
+
+  isDriver(): boolean {
+    return this.hasAnyRole('DRIVER');
+  }
+
   login(username: string, password: string) {
     return this.http.post<AuthResponse>('/api/v1/auth/login', { username, password }).pipe(
       tap(res => {

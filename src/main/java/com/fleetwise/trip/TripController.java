@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class TripController {
     private final TripService tripService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TripResponse>> findAll(
             @RequestParam(required = false) Long vehicleId) {
         if (vehicleId != null) {
@@ -28,16 +30,19 @@ public class TripController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TripResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(tripService.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER', 'DRIVER')")
     public ResponseEntity<TripResponse> create(@Valid @RequestBody CreateTripRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tripService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<TripResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateTripRequest request) {
@@ -45,8 +50,10 @@ public class TripController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         tripService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

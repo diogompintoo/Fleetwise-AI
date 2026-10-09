@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { VehicleService } from '../../services';
 import { Vehicle } from '../../models';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-vehicles',
@@ -12,12 +13,22 @@ import { Vehicle } from '../../models';
           <h2 class="text-2xl font-bold text-white mb-1">Vehicles</h2>
           <p class="text-gray-400 text-sm">Fleet vehicle inventory, specifications and operational status</p>
         </div>
-        <button
-          (click)="loadVehicles()"
-          class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-700 transition-colors"
-        >
-          ↻ Refresh
-        </button>
+
+        <div class="flex items-center gap-3">
+          @if (auth.isManagerOrAdmin()) {
+            <button
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-medium transition-colors"
+              (click)="openCreate()">
+              + New
+            </button>
+          }
+
+          <button
+            (click)="loadVehicles()"
+            class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-700 transition-colors">
+            ↻ Refresh
+          </button>
+        </div>
       </div>
 
       <!-- Loading State -->
@@ -56,6 +67,9 @@ import { Vehicle } from '../../models';
                   <th class="px-6 py-4 font-medium">Year</th>
                   <th class="px-6 py-4 font-medium">Fuel Type</th>
                   <th class="px-6 py-4 font-medium">Status</th>
+                  @if (auth.isManagerOrAdmin()) {
+                    <th class="px-6 py-4 font-medium text-right">Actions</th>
+                  }
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-800">
@@ -83,6 +97,21 @@ import { Vehicle } from '../../models';
                         </span>
                       }
                     </td>
+
+                    @if (auth.isManagerOrAdmin()) {
+                      <td class="px-6 py-4 text-right space-x-3">
+                        <button
+                          (click)="edit(vehicle)"
+                          class="text-blue-400 hover:text-blue-300 text-sm">
+                          Edit
+                        </button>
+                        <button
+                          (click)="remove(vehicle.id)"
+                          class="text-red-400 hover:text-red-300 text-sm">
+                          Delete
+                        </button>
+                      </td>
+                    }
                   </tr>
                 }
               </tbody>
@@ -95,6 +124,7 @@ import { Vehicle } from '../../models';
 })
 export class VehiclesComponent implements OnInit {
   private readonly vehicleService = inject(VehicleService);
+  readonly auth = inject(AuthService);
 
   readonly vehicles = signal<Vehicle[]>([]);
   readonly isLoading = signal<boolean>(true);
@@ -117,6 +147,26 @@ export class VehiclesComponent implements OnInit {
         this.errorMessage.set('Error loading vehicles from API.');
         this.isLoading.set(false);
       }
+    });
+  }
+
+  // Placeholder 
+  openCreate(): void {
+    console.log('Open create vehicle modal');
+    // TODO:
+  }
+
+  edit(vehicle: Vehicle): void {
+    console.log('Edit vehicle', vehicle);
+    // TODO
+  }
+
+  remove(id: number): void {
+    if (!confirm('Are you sure you want to delete this vehicle?')) return;
+
+    this.vehicleService.delete(id).subscribe({
+      next: () => this.loadVehicles(),
+      error: () => alert('Failed to delete vehicle')
     });
   }
 }

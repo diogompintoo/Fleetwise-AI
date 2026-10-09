@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class DriverController {
     private final DriverService driverService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<DriverResponse>> findAll(
             @RequestParam(required = false) Long companyId) {
         if (companyId != null) {
@@ -28,16 +30,19 @@ public class DriverController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DriverResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(driverService.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<DriverResponse> create(@Valid @RequestBody CreateDriverRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(driverService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<DriverResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateDriverRequest request) {
@@ -45,8 +50,10 @@ public class DriverController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         driverService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

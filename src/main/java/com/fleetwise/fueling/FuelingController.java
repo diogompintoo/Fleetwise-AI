@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class FuelingController {
     private final FuelingService fuelingService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<FuelingResponse>> findAll(
             @RequestParam(required = false) Long vehicleId) {
         if (vehicleId != null) {
@@ -28,16 +30,19 @@ public class FuelingController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<FuelingResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(fuelingService.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER', 'DRIVER')")
     public ResponseEntity<FuelingResponse> create(@Valid @RequestBody CreateFuelingRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(fuelingService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<FuelingResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateFuelingRequest request) {
@@ -45,8 +50,10 @@ public class FuelingController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         fuelingService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

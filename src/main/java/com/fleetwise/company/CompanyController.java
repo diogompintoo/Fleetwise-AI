@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,21 +20,25 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<CompanyResponse>> findAll() {
         return ResponseEntity.ok(companyService.findAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CompanyResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<CompanyResponse> create(@Valid @RequestBody CreateCompanyRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(companyService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<CompanyResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateCompanyRequest request) {
@@ -41,8 +46,10 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         companyService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

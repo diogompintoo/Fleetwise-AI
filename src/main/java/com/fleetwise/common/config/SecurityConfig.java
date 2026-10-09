@@ -4,8 +4,10 @@ import com.fleetwise.auth.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -26,11 +29,23 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // público
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/**").authenticated()
+
+                .requestMatchers(HttpMethod.POST, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
+                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
+                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
+                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
