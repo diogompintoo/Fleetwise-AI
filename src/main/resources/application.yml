@@ -82,5 +82,7 @@ security:
 
 logging:
   level:
+    root: WARN
     com.fleetwise: INFO
     org.springframework.web: WARN
+    org.hibernate: WARN
