@@ -11,16 +11,17 @@ FROM maven:3.9-eclipse-temurin-21-alpine AS backend-build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-# Copy build from Angular 
+
+# Copy the browser build and rename index.csr.html → index.html
 COPY --from=frontend-build /app/frontend/dist/frontend/browser ./src/main/resources/static
+RUN cp src/main/resources/static/index.csr.html src/main/resources/static/index.html
+
 RUN mvn -q -DskipTests package
 
 # ===== Stage 3: Runtime =====
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-RUN addgroup -S app && adduser -S app -G app
 COPY --from=backend-build /app/target/*.jar app.jar
-USER app
 EXPOSE 8080
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+ExitOnOutOfMemoryError"
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

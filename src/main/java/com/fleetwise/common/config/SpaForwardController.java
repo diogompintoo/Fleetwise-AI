@@ -1,4 +1,4 @@
-/* package com.fleetwise.common.config;
+package com.fleetwise.common.config;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,13 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class SpaForwardController {
 
-    /
-    @GetMapping(value = {
-            "/",
-            "/{path:^(?!api|actuator|assets).*$}",
-            "/{path:^(?!api|actuator|assets).*$}/**"
-    })
+    @GetMapping({"/", "/login", "/dashboard", "/companies", "/vehicles"})
     public String forward() {
         return "forward:/index.html";
     }
-}*/
+}
