@@ -4,7 +4,6 @@ import com.fleetwise.auth.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -29,38 +28,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Auth + health
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
-
-                // Angular static assets + SPA routes
-                .requestMatchers(
-                        "/",
-                        "/index.html",
-                        "/favicon.ico",
-                        "/assets/**",
-                        "/*.js",
-                        "/*.css",
-                        "/*.map",
-                        "/*.ico",
-                        "/*.png",
-                        "/*.svg",
-                        "/*.woff",
-                        "/*.woff2"
-                ).permitAll()
-
-                // API read
-                .requestMatchers(HttpMethod.GET, "/api/v1/**").authenticated()
-
-                // API write – master data
-                .requestMatchers(HttpMethod.POST, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
-                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
-                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/companies/**", "/api/v1/vehicles/**", "/api/v1/drivers/**")
-                    .hasAnyRole("ADMIN", "FLEET_MANAGER")
-
-                .anyRequest().authenticated()
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
