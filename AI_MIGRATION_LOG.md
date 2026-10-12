@@ -1,6 +1,6 @@
 # FleetWise AI — Development Benchmark & AI Velocity Log (Manual vs. AI-Assisted)
 
-> **Continuous Benchmark & Productivity Log**: A systematic comparison between manual senior engineering effort and AI-assisted development (powered by Antigravity).
+> **Continuous Benchmark & Productivity Log**: A systematic comparison between manual senior engineering effort and AI-assisted development (powered by Antigravity, Grok.com, Claude.ai).
 
 ---
 
@@ -314,22 +314,28 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
 
   ---
 
+### [Task 11.1] GitHub Actions CI (Backend + Frontend)
 
-
-## Phase 4 Summary: React to Enterprise Angular Migration
-
-- **Total Manual Engineering Estimate:** **~13.5–14.0 hours**
-- **Total Time with AI (Antigravity):** **~1 hour 15 minutes**
-- **Net Time Saved in Phase 4:** **~12.2–12.7 hours** (~91% development velocity acceleration!)
-- **Architectural Deliverables:**
-  - Complete modern standalone Angular frontend (v21).
-  - Reactive state management with native Signals (`signal`, `computed`).
-  - Typed domain models and injectable HTTP service layer (`HttpClient` with fetch).
-  - Dark-mode responsive UI matching the project design system in Tailwind CSS.
-  - Zero-CORS development proxy forwarding to Spring Boot on port 8081.
-  - Full parity with legacy React prototype plus enhanced resilience (skeletons, error retries, and AI insights preview).
-
-
-
-
+- **Date / Timestamp:** 2026-10-12
+- **Task Performed:** Added continuous integration pipelines for backend and frontend so every push/PR is validated automatically.
+- **Affected Files:**
+  - `.github/workflows/backend-ci.yml`
+  - `.github/workflows/frontend-ci.yml`
+  - `src/main/resources/application.yml`
+  - `src/test/resources/application-test.yml`
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **Backend CI:** Java 21 (Temurin), `mvn clean verify` with `spring.profiles.active=test`
+  - **Test profile:** H2 in-memory database (no PostgreSQL required in CI)
+  - **Frontend CI:** Node 20, `npm ci` + `npm run build`
+  - Artifact upload for backend JAR and frontend `dist/`
+  - Manual trigger via `workflow_dispatch`
+- **Verification:**
+  - Backend CI: green (contextLoads with H2)
+  - Frontend CI: green (production build)
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~3h 00m – 4h 00m (workflow setup, test profile, H2 vs Postgres debugging)
+  - **With AI:** ~45m – 1h 00m
+  - **Time Saved:** **~2h 15m – 3h 00m**
 

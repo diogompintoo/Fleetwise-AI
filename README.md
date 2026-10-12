@@ -107,7 +107,7 @@ Current login uses in-memory demo users (not production identity management).
 | 8     | AI assistant (insights, “why?”, natural language questions) | **In progress** |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
 | 10    | AI monthly reports (PDF)                                    | Planned     |
-| 11    | CI/CD (GitHub Actions)                                      | Planned     |
+| 11    | CI/CD (GitHub Actions)                                      | **Done** |
 | 12    | Monitoring (App Insights) + Key Vault                       | Planned     |
 | 13    | Documentation                                               | Ongoing     |
 
@@ -124,9 +124,11 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
 | 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
 | 8 (partial)| ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Rule-based AI Fleet Insights (LLM still pending)   |
-| **Total**  | **~52–54.5 h**  | **~7h 15m** | **~44.7–47.8 h** | Backend + Analytics + Angular + Auth foundation    |
+| 11         | ~4.0 h          | ~45m        | ~3.2 h           | Backend + Frontend CI on GitHub Actions            |
+| **Total**  | **~56–58.5 h**  | **~8h**     | **~47.9–51 h**   | Backend + Analytics + Angular + Auth foundation    |
 
-Estimates are realistic for a senior developer writing everything from scratch (including thinking time, naming, edge cases and consistency). AI reduced boilerplate and kept structure consistent across features.
+Note on Time Estimates:
+Manual estimates serve as a reference benchmark for unassisted development. Through an AI-assisted workflow, development speed was greatly enhanced by automating repetitive code, while my focus remained on prompt engineering, architectural consistency, and verifying feature correctness.
 
 ---
 
