@@ -15,21 +15,22 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 
 ## 📊 Global Project Benchmark Table (Phases 1 to 13)
 
-| Phase     | Scope / Milestone                                            | Manual Estimate | With AI               | Time Saved       | Status          | Notes                                                                  |
-|-----------|--------------------------------------------------------------|-----------------|-----------------------|------------------|-----------------|------------------------------------------------------------------------|
-| **1–2**   | Domain Model, Database, Spring Boot CRUDs & Validation       | ~14.5–16.5 h    | ~2.0 h                | **~12.5–14.5 h** | **Completed**   | Entities, DTOs, Bean Validation, Docker, RFC 7807                      |
-| **3**     | Analytics, Fleet/Vehicle Metrics & Anomaly Rules             | ~6.0 h          | ~1.5 h                | **~4.5–5.1 h**   | **Completed**   | Consumption, cost/km, variance, Docker/Git fixes                       |
-| **4**     | Frontend Dashboard (Angular + TypeScript + Tailwind)         | ~13.5–14.0 h    | **~1h 15m**           | **~12.2–12.7 h** | **Completed**   | Full migration from React to Enterprise Angular (Signals & DI)         |
-| **5**     | JWT login foundation + basic RBAC; Entra ID later            | ~8.0 h          | **~1h 30m (to date)** | **~6.5 h**       | **In progress** | Demo JWT + role-based rules done; Entra ID and persistent users remain |
-| **6**     | Cloud Deployment (Azure Container Apps / App Service)        | ~6.0 h          | —                     | —                | Pending         | Infrastructure as Code, containerization, cloud config                 |
-| **7**     | Document Storage & OCR Extraction (Azure Blob)               | ~7.0 h          | —                     | —                | Pending         | Fuel receipts / maintenance invoices ingestion                         |
-| **8**     | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries) | ~10.0 h         | **~1h 00m (to date)** | **~9.0 h**       | **In progress** | Rule-based insights live; generative/LLM layer still pending           |
-| **9**     | Advanced Anomaly Detection (Statistical / ML)                | ~8.0 h          | —                     | —                | Pending         | Evolving rule-based heuristics into predictive models                  |
-| **10**    | Monthly Automated Reports (Executive PDF / Excel Export)     | ~5.0 h          | —                     | —                | Pending         | Automated report generation engine                                     |
-| **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h          | —                     | —                | Pending         | Automated linting, test suites, multi-stage builds                     |
-| **12**    | Observability (Azure App Insights) & Azure Key Vault         | ~4.0 h          | —                     | —                | Pending         | Telemetry, distributed tracing, secret management                      |
-| **13**    | Technical Documentation & Portfolio Benchmark Report         | ~4.0 h          | ~0.5 h                | **~3.5 h**       | Ongoing         | Live benchmark catalog, API specs, architecture guides                 |
-| **Total** | **FleetWise AI — Full Lifecycle**                            | **~90.5–93.0 h**| **~7h 35m (to date)** | **~44.7–47.8 h+**| In Progress     | Massive delivery acceleration via Antigravity, Claude and Grok         |
+| Phase     | Scope / Milestone                                            | Manual Estimate  | With AI               | Time Saved        | Status                 | Notes                                                                 |
+|-----------|--------------------------------------------------------------|------------------|-----------------------|-------------------|------------------------|-----------------------------------------------------------------------|
+| **1–2**   | Domain Model, Database, Spring Boot CRUDs & Validation       | ~14.5–16.5 h     | ~2.0 h                | **~12.5–14.5 h**  | **Completed**          | Entities, DTOs, Bean Validation, Docker, RFC 7807                     |
+| **3**     | Analytics, Fleet/Vehicle Metrics & Anomaly Rules             | ~6.0 h           | ~1.5 h                | **~4.5–5.1 h**    | **Completed**          | Consumption, cost/km, variance, Docker/Git fixes                      |
+| **4**     | Frontend Dashboard (Angular + TypeScript + Tailwind)         | ~13.5–14.0 h     | **~1h 15m**           | **~12.2–12.7 h**  | **Completed**          | Full migration from React to Enterprise Angular (Signals & DI)        |
+| **5**     | JWT login foundation + basic RBAC; Entra ID later            | ~8.0 h           | **~1h 30m (to date)** | **~6.5 h**        | **In progress**        | Demo JWT + role-based rules done; Entra ID and persistent users remain|
+| **6**     | Cloud Deployment (Railway public demo; Azure later)          | ~5.0–6.0 h       | **~2h 15m**           | **~3.0–3.5 h**    | **Completed (demo)**   | Live at fleetwise-ai-production.up.railway.app                        |
+| **7**     | Document Storage & OCR Extraction (Azure Blob)               | ~7.0 h           | —                     | —                 | Pending                | Fuel receipts / maintenance invoices ingestion                        |
+| **8**     | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries) | ~10.0 h          | **~1h 00m (to date)** | **~9.0 h**        | **In progress**        | Rule-based insights live; generative/LLM layer still pending          |
+| **9**     | Advanced Anomaly Detection (Statistical / ML)                | ~8.0 h           | —                     | —                 | Pending                | Evolving rule-based heuristics into predictive models                 |
+| **10**    | Monthly Automated Reports (Executive PDF / Excel Export)     | ~5.0 h           | —                     | —                 | Pending                | Automated report generation engine                                    |
+| **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h           | **~45m**              | **~3.2 h**        | **Completed**          | Backend (H2 test profile) + Frontend (npm build)                      |
+| **12**    | Observability (Azure App Insights) & Azure Key Vault         | ~4.0 h           | —                     | —                 | Pending                | Telemetry, distributed tracing, secret management                     |
+| **13**    | Technical Documentation & Portfolio Benchmark Report         | ~4.0 h           | ~0.5 h                | **~3.5 h**        | Ongoing                | Live benchmark catalog, API specs, architecture guides                |
+| **Total** | **FleetWise AI — Full Lifecycle**                            | **~89.5–92.5 h** | **~10h 15m (to date)**| **~50.9–54.5 h+** | In Progress            | Massive delivery acceleration via Antigravity, Claude and Grok        |
+
 
 Massive delivery acceleration via Antigravity AI, Claude and Grok.                                    
 
@@ -339,3 +340,31 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **With AI:** ~45m – 1h 00m
   - **Time Saved:** **~2h 15m – 3h 00m**
 
+---
+
+### [Task 6.1] Public cloud deploy (Railway)
+
+- **Date / Timestamp:** 2026-10-12
+- **Task Performed:** Deployed the full stack (Spring Boot + Angular + PostgreSQL) to Railway as a public portfolio demo, including production config, JWT secrets, SPA static packaging and networking fixes.
+- **Affected Files:**
+  - `Dockerfile`
+  - `.dockerignore`
+  - `src/main/resources/application.yml` (profile `prod`)
+  - `src/main/java/com/fleetwise/common/config/SecurityConfig.java`
+  - `src/main/java/com/fleetwise/common/config/SpaForwardController.java`
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - Multi-stage Docker build (Node Angular → Maven JAR with static assets)
+  - Map `index.csr.html` → `index.html` for Angular SSR browser output
+  - Production profile: `PORT`, JDBC env vars, JWT secret/expiration
+  - Security rules: API authenticated, SPA assets public
+  - Railway PostgreSQL + public domain on port 8080
+  - Verified: `POST /api/v1/auth/login` → 200 + JWT; UI login works
+- **Verification:**
+  - Live URL: https://fleetwise-ai-production.up.railway.app
+  - Login with demo users (`admin` / `manager` / `driver`)
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~5h 00m – 6h 00m (Docker multi-stage, prod config, Railway networking, SPA packaging, JWT placeholders, 502/403/500 debugging)
+  - **With AI:** ~2h 00m – 2h 30m
+  - **Time Saved:** **~3h 00m – 3h 30m**

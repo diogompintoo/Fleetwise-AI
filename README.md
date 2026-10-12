@@ -5,6 +5,20 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 > Portfolio project focused on demonstrating **how AI assists software development**  
 > (time savings, architecture decisions, clean domain design).
 
+
+## Live demo
+
+- **URL:** https://fleetwise-ai-production.up.railway.app
+- **Demo users:**
+
+| User    | Password    | Role          |
+|---------|-------------|---------------|
+| admin   | admin123    | ADMIN         |
+| manager | manager123  | FLEET_MANAGER |
+| driver  | driver123   | DRIVER        |
+
+> Note: demo data may be empty until seed is loaded. Auth, RBAC and AI insights API are live.
+
 ---
 
 ## Screenshots
@@ -102,7 +116,7 @@ Current login uses in-memory demo users (not production identity management).
 | 3     | Analytics (consumption, cost/km, variation, anomaly rules)  | **Done**    |
 | 4     | Angular dashboard (KPIs, tables, Signals, Tailwind)         | **Done**    |
 | 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
-| 6     | Azure deployment                                            | Planned     |
+| 6     | Azure / cloud deployment (Railway for public demo)          | **Done** (demo) |
 | 7     | Blob Storage + document extraction                          | Planned     |
 | 8     | AI assistant (insights, “why?”, natural language questions) | **In progress** |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
@@ -123,9 +137,10 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 3          | ~6 h            | ~1h 30min   | ~4.5–5.1 h       | Fleet/vehicle metrics & anomaly rules              |
 | 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
 | 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
+| 6 (Demo)   | ~5.0–6.0 h      | ~2h 15m     | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files |
 | 8 (partial)| ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Rule-based AI Fleet Insights (LLM still pending)   |
 | 11         | ~4.0 h          | ~45m        | ~3.2 h           | Backend + Frontend CI on GitHub Actions            |
-| **Total**  | **~56–58.5 h**  | **~8h**     | **~47.9–51 h**   | Backend + Analytics + Angular + Auth foundation    |
+| **Total**  | **~61–64.5 h**  | **~10h 15m**| **~50.9–54.5 h** | Backend + Analytics + Angular + Auth foundation    |
 
 Note on Time Estimates:
 Manual estimates serve as a reference benchmark for unassisted development. Through an AI-assisted workflow, development speed was greatly enhanced by automating repetitive code, while my focus remained on prompt engineering, architectural consistency, and verifying feature correctness.
