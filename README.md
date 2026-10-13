@@ -143,7 +143,7 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
 | 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
 | 6 (Demo)   | ~5.0–6.0 h      | ~2h 15m     | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files |
-| 8          | ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Fleet Insights integration with Gemini 3.8 Flash API via Spring RestClient |
+| 8          | ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Fleet Insights integration with GROQ_API model openai/gpt-oss-20b via Spring RestClient |
 | 11         | ~4.0 h          | ~45m        | ~3.2 h           | Backend + Frontend CI on GitHub Actions            |
 | **Total**  | **~61–64.5 h**  | **~10h 15m**| **~50.9–54.5 h** | Backend + Analytics + Angular + Auth foundation    |
 

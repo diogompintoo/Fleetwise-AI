@@ -382,8 +382,8 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - `README.md`
   - `AI_MIGRATION_LOG.md`
 - **What Was Implemented:**
-  - Configured Spring profiles (`local`, `prod`) and dynamic environment property injection for `GEMINI_API_KEY`.
-  - Implemented `GeminiService` using Spring's `RestClient` to dispatch structured JSON payloads containing fleet telemetry to the `v1beta` endpoint (`/models/gemini-3.8-flash:generateContent`).
+  - Configured Spring profiles (`local`, `prod`) and dynamic environment property injection for `GROQ_API_KEY`.
+  - Implemented `GeminiService` using Spring's `RestClient` to dispatch structured JSON payloads containing fleet telemetry to the `v1` endpoint (`/chat/completions`).
   - Added robust exception handling and fallback responses to gracefully manage intermittent high-demand states (`503 Service Unavailable`) from the upstream Google API.
   - Secured the `/api/v1/ai/insights` route via Spring Security method-level authorization (`ADMIN` and `FLEET_MANAGER` roles).
 - **Verification:**
