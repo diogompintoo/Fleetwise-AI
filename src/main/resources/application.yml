@@ -8,10 +8,10 @@ server:
   port: 8081
 
 ai:
-  gemini:
-    api-key: ${GEMINI_API_KEY:}
-    model: gemini-3.8-flash
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent
+  groq:
+    api-key: ${GROQ_API_KEY:}
+    model: llama-3.1-8b-instant
+    url: https://api.groq.com/openai/v1/chat/completions
 
 ---
 spring:
