@@ -17,11 +17,7 @@ public class GeminiService {
     @Value("${ai.gemini.url}")
     private String apiUrl;
 
-    private final RestClient restClient;
-
-    public GeminiService() {
-        this.restClient = RestClient.create();
-    }
+    private final RestClient restClient = RestClient.create();
 
     public String generateInsight(String prompt) {
         try {
@@ -58,7 +54,7 @@ public class GeminiService {
             return (String) part.get("text");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Gemini API Error: " + e.getMessage());
             return "AI insights temporarily unavailable.";
         }
     }
