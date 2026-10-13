@@ -10,8 +10,8 @@ server:
 ai:
   gemini:
     api-key: ${GEMINI_API_KEY:}
-    model: gemini-3.8-flash
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent
+    model: gemini-2.5-flash
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
 
 ---
 spring:
