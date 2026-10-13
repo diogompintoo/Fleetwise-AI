@@ -7,6 +7,12 @@ spring:
 server:
   port: 8081
 
+ai:
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    model: gemini-1.5-flash
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+
 ---
 spring:
   config:
@@ -29,12 +35,10 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-
 security:
-    jwt:
-      secret: fleetwiseai-super-secret-key-256bits-minimum-required-here
-      expiration: 86400000
-
+  jwt:
+    secret: ${SECURITY_JWT_SECRET:fleetwiseai-super-secret-key-256bits-minimum-required-here}
+    expiration: 86400000
 
 logging:
   level:
@@ -77,7 +81,7 @@ server:
 
 security:
   jwt:
-    secret: ${SECURITY_JWT_SECRET:fleetwise-prod-secret-key-change-me-32chars-min}
+    secret: ${SECURITY_JWT_SECRET}
     expiration: ${SECURITY_JWT_EXPIRATION:86400000}
 
 logging:
