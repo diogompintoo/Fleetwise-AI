@@ -23,7 +23,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **5**     | JWT login foundation + basic RBAC; Entra ID later            | ~8.0 h           | **~1h 30m (to date)** | **~6.5 h**        | **In progress**        | Demo JWT + role-based rules done; Entra ID and persistent users remain|
 | **6**     | Cloud Deployment (Railway public demo; Azure later)          | ~5.0–6.0 h       | **~2h 15m**           | **~3.0–3.5 h**    | **Completed (demo)**   | Live at fleetwise-ai-production.up.railway.app                        |
 | **7**     | Document Storage & OCR Extraction (Azure Blob)               | ~7.0 h           | —                     | —                 | Pending                | Fuel receipts / maintenance invoices ingestion                        |
-| **8**     | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries) | ~10.0 h          | **~1h 00m (to date)** | **~9.0 h**        | **In progress**        | Rule-based insights live; generative/LLM layer still pending          |
+| **8** | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries)     | ~10.0 h          | ~1h 30m               | **~8.5 h**        | **Completed**          | Gemini 3.8 Flash LLM integration live via Spring RestClient           |
 | **9**     | Advanced Anomaly Detection (Statistical / ML)                | ~8.0 h           | —                     | —                 | Pending                | Evolving rule-based heuristics into predictive models                 |
 | **10**    | Monthly Automated Reports (Executive PDF / Excel Export)     | ~5.0 h           | —                     | —                 | Pending                | Automated report generation engine                                    |
 | **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h           | **~45m**              | **~3.2 h**        | **Completed**          | Backend (H2 test profile) + Frontend (npm build)                      |
@@ -368,3 +368,28 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~5h 00m – 6h 00m (Docker multi-stage, prod config, Railway networking, SPA packaging, JWT placeholders, 502/403/500 debugging)
   - **With AI:** ~2h 00m – 2h 30m
   - **Time Saved:** **~3h 00m – 3h 30m**
+
+---
+
+### [Task 8.1] AI Assistant & Fleet Insights Integration (Gemini LLM)
+
+- **Date / Timestamp:** 2026-10-13
+- **Task Performed:** Replaced mock rule-based fleet insights with a live, generative AI integration using the Google Gemini API (`gemini-3.8-flash`) via Spring `RestClient`, secured with JWT/RBAC, and deployed to Railway.
+- **Affected Files:**
+  - `src/main/resources/application.yml`
+  - `src/main/java/com/fleetwise/ai/GeminiService.java`
+  - `src/main/java/com/fleetwise/ai/AiInsightController.java`
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - Configured Spring profiles (`local`, `prod`) and dynamic environment property injection for `GEMINI_API_KEY`.
+  - Implemented `GeminiService` using Spring's `RestClient` to dispatch structured JSON payloads containing fleet telemetry to the `v1beta` endpoint (`/models/gemini-3.8-flash:generateContent`).
+  - Added robust exception handling and fallback responses to gracefully manage intermittent high-demand states (`503 Service Unavailable`) from the upstream Google API.
+  - Secured the `/api/v1/ai/insights` route via Spring Security method-level authorization (`ADMIN` and `FLEET_MANAGER` roles).
+- **Verification:**
+  - Tested via `curl` against the production Railway deployment; confirmed successful HTTP communication, valid JWT authorization, and proper handling of upstream model responses.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~10h 00m (API exploration, JSON mapping, HTTP client configuration, model path diagnostics, security integration, error handling)
+  - **With AI:** ~1h 00m
+  - **Time Saved:** **~9h**
+

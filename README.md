@@ -89,17 +89,22 @@ com.fleetwise
 
 ## API overview
 
-| Resource       | Base path                 |
-|----------------|---------------------------|
-| Authentication | `POST /api/v1/auth/login` |
-| Companies      | `/api/v1/companies`       |
-| Vehicles       | `/api/v1/vehicles`        |
-| Drivers        | `/api/v1/drivers`         |
-| Trips          | `/api/v1/trips`           |
-| Fuelings       | `/api/v1/fuelings`        |
-| Expenses       | `/api/v1/expenses`        |
-| Maintenances   | `/api/v1/maintenances`    |
-| Analytics      | `/api/v1/analytics`       |
+## API overview
+
+| Resource | Base path | Authentication |
+|---|---|---|
+| Auth | `/api/v1/auth/login` | Public |
+| Companies | `/api/v1/companies` | Bearer Token |
+| Vehicles | `/api/v1/vehicles` | Bearer Token |
+| Drivers | `/api/v1/drivers` | Bearer Token |
+| Trips | `/api/v1/trips` | Bearer Token |
+| Fuelings | `/api/v1/fuelings` | Bearer Token |
+| Expenses | `/api/v1/expenses` | Bearer Token |
+| Maintenances | `/api/v1/maintenances` | Bearer Token |
+| Analytics | `/api/v1/analytics` | Bearer Token |
+| **AI Insights** | `/api/v1/ai` | **Bearer Token (`ADMIN`, `FLEET_MANAGER`)** |
+
+
 
 All domain endpoints require a valid bearer token. List endpoints accept optional filters (`companyId`, `vehicleId`).  
 Current login uses in-memory demo users (not production identity management).
@@ -118,7 +123,7 @@ Current login uses in-memory demo users (not production identity management).
 | 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
 | 6     | Azure / cloud deployment (Railway for public demo)          | **Done** (demo) |
 | 7     | Blob Storage + document extraction                          | Planned     |
-| 8     | AI assistant (insights, “why?”, natural language questions) | **In progress** |
+| 8 | AI assistant (insights, “why?”, natural language questions) | Done (Gemini 3.8 Flash Integration via RestClient) |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
 | 10    | AI monthly reports (PDF)                                    | Planned     |
 | 11    | CI/CD (GitHub Actions)                                      | **Done** |
@@ -138,7 +143,7 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
 | 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
 | 6 (Demo)   | ~5.0–6.0 h      | ~2h 15m     | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files |
-| 8 (partial)| ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Rule-based AI Fleet Insights (LLM still pending)   |
+| 8          | ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Fleet Insights integration with Gemini 3.8 Flash API via Spring RestClient |
 | 11         | ~4.0 h          | ~45m        | ~3.2 h           | Backend + Frontend CI on GitHub Actions            |
 | **Total**  | **~61–64.5 h**  | **~10h 15m**| **~50.9–54.5 h** | Backend + Analytics + Angular + Auth foundation    |
 
