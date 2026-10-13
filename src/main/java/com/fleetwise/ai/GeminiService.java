@@ -58,7 +58,7 @@ public class GeminiService {
             return (String) part.get("text");
 
         } catch (Exception e) {
-            // Em ambiente dev podes logar o erro: log.error("Error calling Gemini API", e);
+            e.printStackTrace();
             return "AI insights temporarily unavailable.";
         }
     }
