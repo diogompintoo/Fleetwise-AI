@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AiInsightController {
 
-    private final GeminiService geminiService;
+    private final AiInsightService geminiService;
     private final AnalyticsService analyticsService;
 
     @GetMapping("/insights")

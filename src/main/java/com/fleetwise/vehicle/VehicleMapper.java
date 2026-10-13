@@ -15,7 +15,7 @@ public final class VehicleMapper {
                 .licensePlate(request.licensePlate().trim().toUpperCase())
                 .brand(request.brand().trim())
                 .model(request.model().trim())
-                .year(request.year())
+                .manufactureYear(request.manufactureYear())
                 .fuelType(request.fuelType().trim())
                 .initialMileage(request.initialMileage())
                 .active(true)
@@ -26,7 +26,7 @@ public final class VehicleMapper {
         vehicle.setLicensePlate(request.licensePlate().trim().toUpperCase());
         vehicle.setBrand(request.brand().trim());
         vehicle.setModel(request.model().trim());
-        vehicle.setYear(request.year());
+        vehicle.setManufactureYear(request.manufactureYear());
         vehicle.setFuelType(request.fuelType().trim());
         vehicle.setActive(request.active());
     }
@@ -38,7 +38,7 @@ public final class VehicleMapper {
                 vehicle.getLicensePlate(),
                 vehicle.getBrand(),
                 vehicle.getModel(),
-                vehicle.getYear(),
+                vehicle.getManufactureYear(),
                 vehicle.getFuelType(),
                 vehicle.getInitialMileage(),
                 vehicle.getActive()

@@ -31,7 +31,7 @@ public class Vehicle {
     private String model;
 
     @Column(nullable = false)
-    private Integer year;
+    private Integer manufactureYear;
 
     @Column(nullable = false, length = 30)
     private String fuelType;

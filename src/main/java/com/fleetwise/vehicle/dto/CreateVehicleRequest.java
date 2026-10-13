@@ -18,10 +18,10 @@ public record CreateVehicleRequest(
         @Size(max = 100)
         String model,
 
-        @NotNull(message = "Year is required")
-        @Min(value = 1980, message = "Year must be >= 1980")
-        @Max(value = 2030, message = "Year must be <= 2030")
-        Integer year,
+        @NotNull(message = "Manufacture year is required")
+        @Min(value = 1980, message = "Manufacture year must be >= 1980")
+        @Max(value = 2030, message = "Manufacture year must be <= 2030")
+        Integer manufactureYear,
 
         @NotBlank(message = "Fuel type is required")
         @Size(max = 30)

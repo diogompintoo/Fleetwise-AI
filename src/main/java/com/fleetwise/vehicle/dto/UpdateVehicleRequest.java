@@ -15,9 +15,9 @@ public record UpdateVehicleRequest(
         @Size(max = 100)
         String model,
 
-        @NotNull(message = "Year is required")
+        @NotNull(message = "Manufacture year is required")
         @Min(1980) @Max(2030)
-        Integer year,
+        Integer manufactureYear,
 
         @NotBlank(message = "Fuel type is required")
         @Size(max = 30)

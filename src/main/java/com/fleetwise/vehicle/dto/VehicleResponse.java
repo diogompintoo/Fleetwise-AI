@@ -6,7 +6,7 @@ public record VehicleResponse(
         String licensePlate,
         String brand,
         String model,
-        Integer year,
+        Integer manufactureYear,
         String fuelType,
         Integer initialMileage,
         Boolean active
