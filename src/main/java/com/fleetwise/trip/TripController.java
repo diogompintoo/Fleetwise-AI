@@ -36,7 +36,7 @@ public class TripController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FLEET_MANAGER', 'DRIVER')")
     public ResponseEntity<TripResponse> create(@Valid @RequestBody CreateTripRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tripService.create(request));
     }

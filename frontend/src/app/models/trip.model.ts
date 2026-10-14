@@ -17,7 +17,7 @@ export interface CreateTripRequest {
   endLocation: string;
   startMileage: number;
   endMileage: number;
-  purpose: string;
+  purpose?: string;
   vehicleId: number;
   driverId: number;
 }

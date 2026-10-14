@@ -13,9 +13,8 @@ export interface CreateFuelingRequest {
   date: string;
   liters: number;
   pricePerLiter: number;
-  totalCost: number;
   odometer: number;
-  fuelStation: string;
+  fuelStation?: string;
   vehicleId: number;
 }
 

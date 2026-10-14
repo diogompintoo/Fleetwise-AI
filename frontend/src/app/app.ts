@@ -29,6 +29,10 @@ import { AuthService } from './services/auth.service';
               class="block px-4 py-2 rounded-lg text-sm transition-colors text-gray-400 hover:bg-gray-800">
               Vehicles
             </a>
+            <a routerLink="/driver-entry" routerLinkActive="bg-blue-600 text-white"
+              class="block px-4 py-2 rounded-lg text-sm transition-colors text-gray-400 hover:bg-gray-800">
+              Driver Portal
+            </a>
           </nav>
           <div class="absolute bottom-6 left-6 right-6">
             <button (click)="logout()"

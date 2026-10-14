@@ -25,5 +25,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/vehicles/vehicles.component').then(m => m.VehiclesComponent)
   },
+  {
+    path: 'driver-entry',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/driver-entry/driver-entry.component').then(m => m.DriverEntryComponent)
+  },
   { path: '**', redirectTo: '' }
 ];

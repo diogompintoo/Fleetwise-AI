@@ -457,3 +457,34 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~45m (cross-checking endpoints, verifying Docker configuration, writing and formatting onboarding documentation).
   - **With AI:** ~5m (instant syntax correction, structure synchronization, and runbook generation).
   - **Time Saved:** **~40m**.
+
+---
+
+### [Task 4.10 / 5.4] Driver Portal: Fueling & Mileage/Trip Fast Entry Module
+
+- **Date / Timestamp:** 2026-10-14
+- **Task Performed:** Implemented a dedicated Driver Portal (`/driver-entry`) in Angular with standalone components and reactive Signals, enabling drivers and managers to submit fuelings with real-time estimated costs and log trips with automatic distance calculation.
+- **Affected Files:**
+  - `src/main/java/com/fleetwise/trip/TripController.java`
+  - `frontend/src/app/models/fueling.model.ts`
+  - `frontend/src/app/models/trip.model.ts`
+  - `frontend/src/app/models/driver.model.ts`
+  - `frontend/src/app/models/index.ts`
+  - `frontend/src/app/services/driver.service.ts`
+  - `frontend/src/app/services/index.ts`
+  - `frontend/src/app/pages/driver-entry/driver-entry.component.ts`
+  - `frontend/src/app/app.routes.ts`
+  - `frontend/src/app/app.ts`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **RBAC Trip Submission:** Enabled `DRIVER` role on `POST /api/v1/trips` alongside `ADMIN` and `FLEET_MANAGER` to allow field drivers to record trips and mileage.
+  - **Domain Model & Service Alignment:** Created `driver.model.ts` and `DriverService`, and aligned `CreateFuelingRequest` and `CreateTripRequest` interfaces to match Spring Boot DTO contracts.
+  - **DriverEntryComponent (`/driver-entry`):**
+    - **Fueling Log Tab:** Vehicle selector, date picker, current odometer input, liters, price per liter, station name, and real-time reactive pill calculating estimated total cost (`liters * pricePerLiter`).
+    - **Trip & Mileage Tab:** Vehicle and driver selectors, date, start location, destination, start/end odometer readings with reactive computed distance (`end - start`), purpose field, and validation.
+    - **Recent Activity Feed:** Side panel displaying live, recently submitted fuelings and trips with instant visual feedback.
+  - **App Shell Navigation:** Added "Driver Portal" navigation link in `app.ts` and registered lazy-loaded route in `app.routes.ts`.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~3h 00m (building two enterprise forms with Angular Signals, validation, computed signals, service wiring, and navigation integration).
+  - **With AI:** ~15m (rapid generation of typed models, services, component UI, and routing).
+  - **Time Saved:** **~2h 45m**.
