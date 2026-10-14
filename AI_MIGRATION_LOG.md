@@ -438,3 +438,22 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~1h 15m (tracing entity lifecycle across detached states with OSIV disabled, debugging JPQL fetch joins, cross-referencing RBAC permission matrices).
   - **With AI:** ~10m (instant audit, diagnosis, and surgical fixes).
   - **Time Saved:** **~1h 05m**.
+
+---
+
+### [Task 13.1] Technical Documentation Audit & README Alignment
+
+- **Date / Timestamp:** 2026-10-14
+- **Task Performed:** Comprehensive audit and enhancement of repository documentation in `README.md`. Aligned documentation with recent multi-company and RBAC implementations, added missing AI package to domain architecture tree, and added a complete local development runbook.
+- **Affected Files:**
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **Architecture Diagram:** Added the `ai` module (`AiInsightController`, `AiInsightService`) and configuration files (`DataSeeder`, `SpaForwardController`) to the ASCII domain package tree.
+  - **Typo & Duplicate Header Cleanup:** Corrected `RBCA` -> `RBAC` in technology stack table and removed duplicate `## API overview` section header.
+  - **RBAC Matrix Specification:** Enriched API overview table with granular Read and Write access columns, explicitly detailing public routes, manager privileges, and driver-specific constraints.
+  - **Local Development Runbook:** Added explicit, copy-pasteable instructions for starting local PostgreSQL via Docker Compose, Spring Boot on port 8081, and Angular on port 4200.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~45m (cross-checking endpoints, verifying Docker configuration, writing and formatting onboarding documentation).
+  - **With AI:** ~5m (instant syntax correction, structure synchronization, and runbook generation).
+  - **Time Saved:** **~40m**.

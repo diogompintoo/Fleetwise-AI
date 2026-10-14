@@ -43,7 +43,7 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 | API                    | Spring Web (REST)                                          |
 | Persistence            | Spring Data JPA + Hibernate                                |
 | Validation             | Bean Validation                                            |
-| Security               | Spring Security + JWT +basic RBCA (Entra ID later)         |
+| Security               | Spring Security + JWT + basic RBAC (Entra ID later)        |
 | Frontend               | Angular (Standalone Components + Signals) + Tailwind CSS   |
 | Database (local)       | PostgreSQL 16                                              |
 | Database (prod target) | Azure SQL                                                  |
@@ -51,20 +51,22 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 
 ## Project structure (feature / domain oriented)
 
+```text
 com.fleetwise
+├── ai                  AI insights engine (Groq / gpt-oss-20b via Spring RestClient)
 ├── auth                JWT login, JwtService, filter, demo users
 ├── common
-│   ├── config          SecurityConfig
+│   ├── config          SecurityConfig, DataSeeder, SpaForwardController
 │   └── exception       ResourceNotFound, BusinessRule, GlobalExceptionHandler
-├── company
-├── vehicle
-├── driver
-├── trip
-├── fueling
-├── expense
-├── maintenance
-└── analytics
-
+├── company             Company domain, CRUD, repository, validation
+├── vehicle             Vehicle domain, multi-company JOIN FETCH, CRUD
+├── driver              Driver domain, CRUD, validation
+├── trip                Trip domain, auto distance calculation, CRUD
+├── fueling             Fueling domain, auto total cost calculation, CRUD
+├── expense             Expense domain, CRUD
+├── maintenance         Maintenance domain, CRUD
+└── analytics           Fleet & vehicle telemetry, consumption, anomaly rules
+```
 
 ## Key engineering decisions
 
@@ -83,34 +85,60 @@ com.fleetwise
 5. **Feature packages**  
    Ready for analytics, AI and reporting without restructuring.
 
-6. **JWT + basic RBAC**  
-   Stateless bearer-token authentication with role-based authorization.  
-   Demo users: `ADMIN`, `FLEET_MANAGER`, `DRIVER`. Fine-grained rules and Entra ID still pending.
+6. **JWT + Role-Based Access Control (RBAC)**  
+   Stateless bearer-token authentication with method-level authorization (`@PreAuthorize`):  
+   - `ADMIN`: Full system access across all resources.  
+   - `FLEET_MANAGER`: Full operational management across fleet, vehicles, trips, and analytics.  
+   - `DRIVER`: Read-only access to trips and vehicles; write access strictly restricted to fuelings (`POST /api/v1/fuelings`).  
 
-7. **Multi-company fleet scope**
-   Vehicles always belong to a company. List API returns `companyName` and supports `?companyId=` so managers can operate across corporate groups without mixing fleets.   
+7. **Multi-company fleet scope**  
+   Vehicles always belong to a company. List API returns `companyName` and supports `?companyId=` so managers can operate across corporate groups without mixing fleets.
 
 ## API overview
 
-## API overview
+| Resource | Base path | Read Access | Write Access |
+|---|---|---|---|
+| Auth | `/api/v1/auth/login` | Public | Public (Login) |
+| Companies | `/api/v1/companies` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Vehicles | `/api/v1/vehicles` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Drivers | `/api/v1/drivers` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Trips | `/api/v1/trips` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Fuelings | `/api/v1/fuelings` | Authenticated | Create: `+ DRIVER` \| Edit/Delete: Managers only |
+| Expenses | `/api/v1/expenses` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Maintenances | `/api/v1/maintenances` | Authenticated | `ADMIN`, `FLEET_MANAGER` |
+| Analytics | `/api/v1/analytics` | `ADMIN`, `FLEET_MANAGER` | `ADMIN`, `FLEET_MANAGER` |
+| **AI Insights** | `/api/v1/ai` | `ADMIN`, `FLEET_MANAGER` | N/A |
 
-| Resource | Base path | Authentication |
-|---|---|---|
-| Auth | `/api/v1/auth/login` | Public |
-| Companies | `/api/v1/companies` | Bearer Token |
-| Vehicles | `/api/v1/vehicles` | Bearer Token |
-| Drivers | `/api/v1/drivers` | Bearer Token |
-| Trips | `/api/v1/trips` | Bearer Token |
-| Fuelings | `/api/v1/fuelings` | Bearer Token |
-| Expenses | `/api/v1/expenses` | Bearer Token |
-| Maintenances | `/api/v1/maintenances` | Bearer Token |
-| Analytics | `/api/v1/analytics` | Bearer Token |
-| **AI Insights** | `/api/v1/ai` | **Bearer Token (`ADMIN`, `FLEET_MANAGER`)** |
+All domain endpoints require a valid bearer token. List endpoints accept optional filters (`companyId`, `vehicleId`). Current login uses in-memory demo users (not production identity management).
 
+---
 
+## Local Development
 
-All domain endpoints require a valid bearer token. List endpoints accept optional filters (`companyId`, `vehicleId`).  
-Current login uses in-memory demo users (not production identity management).
+### Prerequisites
+- **Java 21**
+- **Node.js 20+** & **npm**
+- **Docker** & **Docker Compose**
+
+### 1. Start the Database
+```bash
+docker compose up -d
+```
+Starts PostgreSQL 16 on `localhost:5432` (db: `fleetwise`, user: `fleetwise`, pass: `fleetwise`).
+
+### 2. Start the Backend (Spring Boot)
+```bash
+./mvnw spring-boot:run
+```
+Runs on `http://localhost:8081`. Demo seed data is automatically populated on first run.
+
+### 3. Start the Frontend (Angular)
+```bash
+cd frontend
+npm install
+npm start
+```
+Runs on `http://localhost:4200` with automated reverse-proxying of `/api` requests to port `8081`.
 
 ---
 
