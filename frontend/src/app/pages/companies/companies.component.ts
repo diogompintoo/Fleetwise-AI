@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CompanyService } from '../../services';
 import { Company } from '../../models';
 import { AuthService } from '../../services/auth.service';
@@ -7,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-companies',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
@@ -33,7 +34,6 @@ import { AuthService } from '../../services/auth.service';
         </div>
       </div>
 
-      <!-- Loading State -->
       @if (isLoading()) {
         <div class="space-y-3 animate-pulse">
           <div class="h-10 bg-gray-900 border border-gray-800 rounded-lg"></div>
@@ -42,7 +42,6 @@ import { AuthService } from '../../services/auth.service';
         </div>
       }
 
-      <!-- Error State -->
       @if (errorMessage()) {
         <div class="bg-red-950/60 border border-red-800 text-red-200 px-4 py-3 rounded-xl mb-6 flex items-center justify-between">
           <p class="text-sm">{{ errorMessage() }}</p>
@@ -52,7 +51,6 @@ import { AuthService } from '../../services/auth.service';
         </div>
       }
 
-      <!-- Table View -->
       @if (!isLoading() && !errorMessage()) {
         @if (companies().length === 0) {
           <div class="bg-gray-900 border border-gray-800 rounded-xl p-12 text-center">
@@ -83,7 +81,7 @@ import { AuthService } from '../../services/auth.service';
                     @if (auth.isManagerOrAdmin()) {
                       <td class="px-6 py-4 text-right space-x-3">
                         <button
-                          (click)="edit(company)"
+                          (click)="openEdit(company)"
                           class="text-blue-400 hover:text-blue-300 text-sm">
                           Edit
                         </button>
@@ -101,6 +99,62 @@ import { AuthService } from '../../services/auth.service';
           </div>
         }
       }
+
+      <!-- Modal Create / Edit -->
+      @if (showForm()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div class="w-full max-w-md rounded-xl border border-gray-700 bg-gray-900 p-6 shadow-xl">
+            <h3 class="mb-4 text-lg font-semibold text-white">
+              {{ editingId() ? 'Edit Company' : 'New Company' }}
+            </h3>
+
+            <form (ngSubmit)="save()" class="space-y-4">
+              <div>
+                <label class="mb-1 block text-xs text-gray-400">Name</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formName"
+                  name="name"
+                  required
+                  maxlength="200"
+                  class="w-full rounded-lg border border-gray-700 bg-gray-950 px-3 py-2 text-sm text-white outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label class="mb-1 block text-xs text-gray-400">Tax Number (NIF)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formTaxNumber"
+                  name="taxNumber"
+                  required
+                  maxlength="50"
+                  class="w-full rounded-lg border border-gray-700 bg-gray-950 px-3 py-2 text-sm text-white outline-none focus:border-blue-500"
+                />
+              </div>
+
+              @if (formError()) {
+                <p class="text-sm text-red-400">{{ formError() }}</p>
+              }
+
+              <div class="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  (click)="closeForm()"
+                  class="rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  [disabled]="saving()"
+                  class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50">
+                  {{ saving() ? 'Saving...' : 'Save' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      }
     </div>
   `
 })
@@ -109,8 +163,16 @@ export class CompaniesComponent implements OnInit {
   readonly auth = inject(AuthService);
 
   readonly companies = signal<Company[]>([]);
-  readonly isLoading = signal<boolean>(true);
+  readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
+
+  readonly showForm = signal(false);
+  readonly editingId = signal<number | null>(null);
+  readonly saving = signal(false);
+  readonly formError = signal<string | null>(null);
+
+  formName = '';
+  formTaxNumber = '';
 
   ngOnInit(): void {
     this.loadCompanies();
@@ -133,13 +195,60 @@ export class CompaniesComponent implements OnInit {
   }
 
   openCreate(): void {
-    console.log('Open create company modal');
-    // TODO
+    this.editingId.set(null);
+    this.formName = '';
+    this.formTaxNumber = '';
+    this.formError.set(null);
+    this.showForm.set(true);
   }
 
-  edit(company: Company): void {
-    console.log('Edit company', company);
-    // TODO
+  openEdit(company: Company): void {
+    this.editingId.set(company.id);
+    this.formName = company.name;
+    this.formTaxNumber = company.taxNumber;
+    this.formError.set(null);
+    this.showForm.set(true);
+  }
+
+  closeForm(): void {
+    this.showForm.set(false);
+    this.formError.set(null);
+  }
+
+  save(): void {
+    const name = this.formName.trim();
+    const taxNumber = this.formTaxNumber.trim();
+
+    if (!name || !taxNumber) {
+      this.formError.set('Name and tax number are required.');
+      return;
+    }
+
+    this.saving.set(true);
+    this.formError.set(null);
+
+    const payload = { name, taxNumber };
+    const id = this.editingId();
+
+    const request$ = id
+      ? this.companyService.update(id, payload)
+      : this.companyService.create(payload);
+
+    request$.subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.closeForm();
+        this.loadCompanies();
+      },
+      error: (err) => {
+        this.saving.set(false);
+        const msg =
+          err?.error?.detail ||
+          err?.error?.title ||
+          'Failed to save company.';
+        this.formError.set(msg);
+      }
+    });
   }
 
   remove(id: number): void {
