@@ -22,20 +22,22 @@ public class VehicleService {
     private final CompanyService companyService;
 
     public List<VehicleResponse> findAll() {
-    return vehicleRepository.findAllWithCompany().stream()
-            .map(VehicleMapper::toResponse)
-            .toList();
-}
+        return vehicleRepository.findAllWithCompany().stream()
+                .map(VehicleMapper::toResponse)
+                .toList();
+    }
 
-public List<VehicleResponse> findByCompany(Long companyId) {
-    companyService.getEntity(companyId); // valida se a company existe
-    return vehicleRepository.findByCompanyIdWithCompany(companyId).stream()
-            .map(VehicleMapper::toResponse)
-            .toList();
-}
+    public List<VehicleResponse> findByCompany(Long companyId) {
+        companyService.getEntity(companyId); // valida se a company existe
+        return vehicleRepository.findByCompanyIdWithCompany(companyId).stream()
+                .map(VehicleMapper::toResponse)
+                .toList();
+    }
 
     public VehicleResponse findById(Long id) {
-        return VehicleMapper.toResponse(getEntity(id));
+        return vehicleRepository.findByIdWithCompany(id)
+                .map(VehicleMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle", id));
     }
 
     public Vehicle getEntity(Long id) {

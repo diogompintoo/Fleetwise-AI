@@ -20,4 +20,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     @Query("SELECT v FROM Vehicle v JOIN FETCH v.company WHERE v.company.id = :companyId")
     List<Vehicle> findByCompanyIdWithCompany(@Param("companyId") Long companyId);
+
+    @Query("SELECT v FROM Vehicle v JOIN FETCH v.company WHERE v.id = :id")
+    Optional<Vehicle> findByIdWithCompany(@Param("id") Long id);
 }

@@ -418,3 +418,23 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~3h 00m – 4h 00m
   - **With AI:** ~1h 15m – 1h 45m
   - **Time Saved:** **~1h 45m – 2h 15m**
+
+---
+
+### [Task 5.3] Backend Audit, Eager Fetch Fix & RBAC Alignment
+
+- **Date / Timestamp:** 2026-10-14
+- **Task Performed:** Comprehensive senior architectural audit of all backend controllers, services, repositories, and security annotations. Resolved Hibernate proxy lazy-initialization risk on single vehicle retrieval and strictly aligned RBAC authorization rules with domain specifications.
+- **Affected Files:**
+  - `src/main/java/com/fleetwise/vehicle/VehicleRepository.java`
+  - `src/main/java/com/fleetwise/vehicle/VehicleService.java`
+  - `src/main/java/com/fleetwise/trip/TripController.java`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **Lazy-Initialization Fix:** Added `findByIdWithCompany(@Param("id") Long id)` with `JOIN FETCH v.company` in `VehicleRepository` and wired it into `VehicleService.findById(id)`. Because `open-in-view: false` is configured, fetching a single vehicle previously risked throwing `LazyInitializationException` when resolving `vehicle.getCompany().getName()` in `VehicleMapper`.
+  - **Service Layer Cleanup:** Verified `@Transactional(readOnly = true)` annotations across all business services and cleaned up indentation in `VehicleService`.
+  - **RBAC Matrix Enforcement:** Updated `TripController` to restrict `POST /api/v1/trips` to `ADMIN` and `FLEET_MANAGER` only (`hasAnyRole('ADMIN', 'FLEET_MANAGER')`), strictly enforcing the policy that `DRIVER` has read-only access to trips and vehicles, and write permissions restricted exclusively to fuelings (`POST /api/v1/fuelings`).
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~1h 15m (tracing entity lifecycle across detached states with OSIV disabled, debugging JPQL fetch joins, cross-referencing RBAC permission matrices).
+  - **With AI:** ~10m (instant audit, diagnosis, and surgical fixes).
+  - **Time Saved:** **~1h 05m**.
