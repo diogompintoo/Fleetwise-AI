@@ -17,7 +17,7 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 | manager | manager123  | FLEET_MANAGER |
 | driver  | driver123   | DRIVER        |
 
-> Note: demo data may be empty until seed is loaded. Auth, RBAC and AI insights API are live.
+> Note: Auth, RBAC, AI insights API and demo seeds are live.
 
 ---
 
