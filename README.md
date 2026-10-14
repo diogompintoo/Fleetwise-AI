@@ -87,6 +87,9 @@ com.fleetwise
    Stateless bearer-token authentication with role-based authorization.  
    Demo users: `ADMIN`, `FLEET_MANAGER`, `DRIVER`. Fine-grained rules and Entra ID still pending.
 
+7. **Multi-company fleet scope**
+   Vehicles always belong to a company. List API returns `companyName` and supports `?companyId=` so managers can operate across corporate groups without mixing fleets.   
+
 ## API overview
 
 ## API overview
@@ -136,16 +139,17 @@ Current login uses in-memory demo users (not production identity management).
 
 Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.md).
 
-| Phase      | Manual estimate | With AI     | Saved            | Notes                                              |
-|------------|-----------------|-------------|------------------|----------------------------------------------------|
-| 1–2        | ~14.5–16.5 h    | ~2 h        | ~12.5–14.5 h     | Domain, CRUDs, validation, Docker                  |
-| 3          | ~6 h            | ~1h 30min   | ~4.5–5.1 h       | Fleet/vehicle metrics & anomaly rules              |
-| 4          | ~13.5–14.0 h    | ~1h 15min   | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)         |
-| 5 (partial)| ~8.0 h          | ~1h 30min*  | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)    |
-| 6 (Demo)   | ~5.0–6.0 h      | ~2h 15m     | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files |
-| 8          | ~10.0 h         | ~1h 00m*    | ~9.0 h*          | Fleet Insights integration with GROQ_API model openai/gpt-oss-20b via Spring RestClient |
-| 11         | ~4.0 h          | ~45m        | ~3.2 h           | Backend + Frontend CI on GitHub Actions            |
-| **Total**  | **~61–64.5 h**  | **~10h 15m**| **~50.9–54.5 h** | Backend + Analytics + Angular + Auth foundation    |
+| Phase       | Manual estimate | With AI      | Saved            | Notes                                                                                   |
+| ----------- | --------------- | ------------ | ---------------- | --------------------------------------------------------------------------------------- |
+| 1–2         | ~14.5–16.5 h    | ~2 h         | ~12.5–14.5 h     | Domain, CRUDs, validation, Docker                                                       |
+| 3           | ~6 h            | ~1h 30min    | ~4.5–5.1 h       | Fleet/vehicle metrics & anomaly rules                                                   |
+| 4           | ~13.5–14.0 h    | ~1h 15min    | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)                                              |
+| 4.9 / 5.x   | ~3.0–4.0 h      | ~1h 30m      | ~1.5–2.5 h       | Multi-company vehicle filter + Companies/Vehicles CRUD forms                            |
+| 5 (partial) | ~8.0 h          | ~1h 30min*   | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)                                         |
+| 6 (Demo)    | ~5.0–6.0 h      | ~2h 15m      | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files                                      |
+| 8           | ~10.0 h         | ~1h 00m*     | ~9.0 h*          | Fleet Insights (GROQ / model) via Spring RestClient                                     |
+| 11          | ~4.0 h          | ~45m         | ~3.2 h           | Backend + Frontend CI on GitHub Actions                                                 |
+| **Total**   | **~64–68.5 h**  | **~11h 45m** | **~52.4–57.0 h** | Backend + Analytics + Angular + Auth + multi-company UI                                 |
 
 Note on Time Estimates:
 Manual estimates serve as a reference benchmark for unassisted development. Through an AI-assisted workflow, development speed was greatly enhanced by automating repetitive code, while my focus remained on prompt engineering, architectural consistency, and verifying feature correctness.

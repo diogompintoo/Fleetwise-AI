@@ -393,3 +393,28 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **With AI:** ~1h 00m
   - **Time Saved:** **~9h**
 
+---
+
+### [Task 4.9 / 5.x] Multi-company vehicle context + CRUD forms
+
+- **Date / Timestamp:** 2026-10-14
+- **Task Performed:** Added proper multi-company support on vehicles (company name in API + filter by company) and completed frontend create/edit flows for companies and vehicles.
+- **Affected Files:**
+  - `VehicleResponse.java`, `VehicleRepository.java`, `VehicleMapper.java`, `VehicleService.java`
+  - `frontend/.../vehicle.model.ts`, `vehicle.service.ts`
+  - `frontend/.../companies.component.ts`, `vehicles.component.ts`
+  - `README.md`, `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - `VehicleResponse` includes `companyId` + `companyName`
+  - Repository queries with `JOIN FETCH v.company` to avoid lazy-loading issues
+  - `GET /api/v1/vehicles?companyId=` filters by company
+  - Angular modals for create/edit company and vehicle (RBAC: ADMIN / FLEET_MANAGER)
+  - UI ready to show company name and filter fleet by company
+- **Verification:**
+  - API returns `companyName` on vehicle list
+  - Filter by `companyId` returns only that company's vehicles
+  - Create/edit/delete flows tested for manager roles
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~3h 00m – 4h 00m
+  - **With AI:** ~1h 15m – 1h 45m
+  - **Time Saved:** **~1h 45m – 2h 15m**
