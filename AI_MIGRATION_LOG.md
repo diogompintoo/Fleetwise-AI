@@ -484,6 +484,7 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
     - **Trip & Mileage Tab:** Vehicle and driver selectors, date, start location, destination, start/end odometer readings with reactive computed distance (`end - start`), purpose field, and validation.
     - **Recent Activity Feed:** Side panel displaying live, recently submitted fuelings and trips with instant visual feedback.
   - **App Shell Navigation:** Added "Driver Portal" navigation link in `app.ts` and registered lazy-loaded route in `app.routes.ts`.
+  - **CI & Build Pipeline Alignment:** Exported `AuthService` from `services/index.ts` and refactored reactive cost/distance calculations into getters, guaranteeing 100% strict-mode compilation during Docker and Railway automated builds.
 - **Estimated Time Saved vs. Manual Implementation:**
   - **Manual Estimate:** ~3h 00m (building two enterprise forms with Angular Signals, validation, computed signals, service wiring, and navigation integration).
   - **With AI:** ~15m (rapid generation of typed models, services, component UI, and routing).

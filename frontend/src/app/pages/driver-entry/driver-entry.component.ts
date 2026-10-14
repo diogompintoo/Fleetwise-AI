@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
@@ -145,7 +145,7 @@ import { Vehicle, Driver, Fueling, Trip, CreateFuelingRequest, CreateTripRequest
               <div class="rounded-lg bg-gray-950/80 border border-gray-800 p-3.5 flex items-center justify-between text-sm">
                 <span class="text-gray-400">Estimated Total Cost:</span>
                 <span class="font-semibold text-emerald-400 text-base">
-                  € {{ computedTotalCost() }}
+                  € {{ computedTotalCost }}
                 </span>
               </div>
 
@@ -270,7 +270,7 @@ import { Vehicle, Driver, Fueling, Trip, CreateFuelingRequest, CreateTripRequest
               <div class="rounded-lg bg-gray-950/80 border border-gray-800 p-3.5 flex items-center justify-between text-sm">
                 <span class="text-gray-400">Calculated Distance:</span>
                 <span class="font-semibold text-blue-400 text-base">
-                  {{ computedDistance() }} km
+                  {{ computedDistance }} km
                 </span>
               </div>
 
@@ -394,17 +394,17 @@ export class DriverEntryComponent implements OnInit {
   tripEndMileage: number | null = null;
   tripPurpose = '';
 
-  computedTotalCost = computed(() => {
-    const l = this.fuelingLiters || 0;
-    const p = this.fuelingPricePerLiter || 0;
+  get computedTotalCost(): string {
+    const l = Number(this.fuelingLiters) || 0;
+    const p = Number(this.fuelingPricePerLiter) || 0;
     return (l * p).toFixed(2);
-  });
+  }
 
-  computedDistance = computed(() => {
-    const start = this.tripStartMileage || 0;
-    const end = this.tripEndMileage || 0;
+  get computedDistance(): number {
+    const start = Number(this.tripStartMileage) || 0;
+    const end = Number(this.tripEndMileage) || 0;
     return end >= start ? end - start : 0;
-  });
+  }
 
   ngOnInit(): void {
     this.loadInitialData();
@@ -496,7 +496,10 @@ export class DriverEntryComponent implements OnInit {
       return;
     }
 
-    if (this.tripEndMileage < this.tripStartMileage) {
+    const startMileage = Number(this.tripStartMileage);
+    const endMileage = Number(this.tripEndMileage);
+
+    if (endMileage < startMileage) {
       this.errorMessage.set('End mileage cannot be less than start mileage.');
       return;
     }
@@ -511,8 +514,8 @@ export class DriverEntryComponent implements OnInit {
       date: this.tripDate,
       startLocation: this.tripStartLocation.trim(),
       endLocation: this.tripEndLocation.trim(),
-      startMileage: Number(this.tripStartMileage),
-      endMileage: Number(this.tripEndMileage),
+      startMileage: startMileage,
+      endMileage: endMileage,
       purpose: this.tripPurpose?.trim() || undefined
     };
 
