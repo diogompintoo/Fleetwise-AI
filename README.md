@@ -123,7 +123,7 @@ Current login uses in-memory demo users (not production identity management).
 | 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
 | 6     | Azure / cloud deployment (Railway for public demo)          | **Done** (demo) |
 | 7     | Blob Storage + document extraction                          | Planned     |
-| 8 | AI assistant (insights, “why?”, natural language questions) | Done (Gemini 3.8 Flash Integration via RestClient) |
+| 8 | AI assistant (insights, “why?”, natural language questions) | Done (gpt-oss-20b Integration via RestClient) |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
 | 10    | AI monthly reports (PDF)                                    | Planned     |
 | 11    | CI/CD (GitHub Actions)                                      | **Done** |
