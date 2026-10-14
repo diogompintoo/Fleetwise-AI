@@ -97,9 +97,6 @@ import { AuthService } from '../../services/auth.service';
                         {{ vehicle.fuelType }}
                       </span>
                     </td>
-                    <td class="px-6 py-4 text-gray-300">
-                      {{ vehicle.companyName }}
-                    </td>
                     <td class="px-6 py-4">
                       @if (vehicle.active) {
                         <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950 text-emerald-400 border border-emerald-800/60">
@@ -111,17 +108,14 @@ import { AuthService } from '../../services/auth.service';
                         </span>
                       }
                     </td>
+                    <td class="px-6 py-4 text-gray-300">{{ vehicle.companyName }}</td>
 
                     @if (auth.isManagerOrAdmin()) {
                       <td class="px-6 py-4 text-right space-x-3">
-                        <button
-                          (click)="openEdit(vehicle)"
-                          class="text-blue-400 hover:text-blue-300 text-sm">
+                        <button (click)="openEdit(vehicle)" class="text-blue-400 hover:text-blue-300 text-sm">
                           Edit
                         </button>
-                        <button
-                          (click)="remove(vehicle.id)"
-                          class="text-red-400 hover:text-red-300 text-sm">
+                        <button (click)="remove(vehicle.id)" class="text-red-400 hover:text-red-300 text-sm">
                           Delete
                         </button>
                       </td>
@@ -274,7 +268,7 @@ export class VehiclesComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.vehicleService.findAll().subscribe({
+    this.vehicleService.findAll(this.filterCompanyId ?? undefined).subscribe({
       next: (data) => {
         this.vehicles.set(data || []);
         this.isLoading.set(false);
