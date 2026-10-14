@@ -1,6 +1,7 @@
 export interface Vehicle {
   id: number;
   companyId: number;
+  companyName: string;
   licensePlate: string;
   brand: string;
   model: string;

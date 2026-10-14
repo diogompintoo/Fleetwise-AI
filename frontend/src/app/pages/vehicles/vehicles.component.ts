@@ -30,6 +30,17 @@ import { AuthService } from '../../services/auth.service';
             class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-700 transition-colors">
             ↻ Refresh
           </button>
+          
+          <select
+            [(ngModel)]="filterCompanyId"
+            (ngModelChange)="onFilterChange()"
+            class="rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-200">
+            <option [ngValue]="null">All companies</option>
+            @for (c of companies(); track c.id) {
+              <option [ngValue]="c.id">{{ c.name }}</option>
+            }
+          </select>
+
         </div>
       </div>
 
@@ -66,6 +77,7 @@ import { AuthService } from '../../services/auth.service';
                   <th class="px-6 py-4 font-medium">Year</th>
                   <th class="px-6 py-4 font-medium">Fuel Type</th>
                   <th class="px-6 py-4 font-medium">Status</th>
+                  <th class="px-6 py-4 font-medium">Company</th>
                   @if (auth.isManagerOrAdmin()) {
                     <th class="px-6 py-4 font-medium text-right">Actions</th>
                   }
@@ -84,6 +96,9 @@ import { AuthService } from '../../services/auth.service';
                       <span class="px-2.5 py-1 rounded-md text-xs bg-gray-800 border border-gray-700 text-gray-300">
                         {{ vehicle.fuelType }}
                       </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-300">
+                      {{ vehicle.companyName }}
                     </td>
                     <td class="px-6 py-4">
                       @if (vehicle.active) {
@@ -247,6 +262,12 @@ export class VehiclesComponent implements OnInit {
     this.companyService.findAll().subscribe({
       next: (data) => this.companies.set(data || [])
     });
+  }
+
+  filterCompanyId: number | null = null;
+
+  onFilterChange(): void {
+    this.loadVehicles();
   }
 
   loadVehicles(): void {

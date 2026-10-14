@@ -35,6 +35,7 @@ public final class VehicleMapper {
         return new VehicleResponse(
                 vehicle.getId(),
                 vehicle.getCompany().getId(),
+                vehicle.getCompany().getName(),
                 vehicle.getLicensePlate(),
                 vehicle.getBrand(),
                 vehicle.getModel(),
