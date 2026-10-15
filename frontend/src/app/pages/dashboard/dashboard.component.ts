@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { forkJoin, of, catchError } from 'rxjs';
-import { CompanyService, VehicleService, TripService, FuelingService } from '../../services';
+import { CompanyService, VehicleService, TripService, FuelingService, ReportService, AuthService } from '../../services';
 import { Company, Vehicle, Trip, Fueling } from '../../models';
 import { AnalyticsService, Insight } from '../../services/analytics.service';
 
@@ -16,17 +16,40 @@ interface StatCard {
   standalone: true,
   template: `
     <div>
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <h2 class="text-2xl font-bold mb-1 text-white">Dashboard</h2>
           <p class="text-gray-400 text-sm">Fleet overview & real-time operational metrics</p>
         </div>
-        <button
-          (click)="loadDashboardData()"
-          class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-700 transition-colors flex items-center gap-2"
-        >
-          <span>↻ Refresh</span>
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          @if (auth.isManagerOrAdmin()) {
+            <button
+              type="button"
+              (click)="exportPdf()"
+              [disabled]="isExportingPdf()"
+              class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 shadow-sm"
+            >
+              <span>📄</span>
+              <span>{{ isExportingPdf() ? 'Generating PDF...' : 'Export PDF' }}</span>
+            </button>
+            <button
+              type="button"
+              (click)="exportCsv()"
+              [disabled]="isExportingCsv()"
+              class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 shadow-sm"
+            >
+              <span>📊</span>
+              <span>{{ isExportingCsv() ? 'Exporting...' : 'Export CSV' }}</span>
+            </button>
+          }
+          <button
+            type="button"
+            (click)="loadDashboardData()"
+            class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm rounded-lg border border-gray-700 transition-colors flex items-center gap-2"
+          >
+            <span>↻ Refresh</span>
+          </button>
+        </div>
       </div>
 
       <!-- Loading State -->
@@ -117,7 +140,12 @@ export class DashboardComponent implements OnInit {
   private readonly tripService = inject(TripService);
   private readonly fuelingService = inject(FuelingService);
   private readonly analyticsService = inject(AnalyticsService);
+  private readonly reportService = inject(ReportService);
+  readonly auth = inject(AuthService);
+
   // Reactive State Signals
+  readonly isExportingPdf = signal(false);
+  readonly isExportingCsv = signal(false);
   readonly companies = signal<Company[]>([]);
   readonly vehicles = signal<Vehicle[]>([]);
   readonly trips = signal<Trip[]>([]);
@@ -247,5 +275,35 @@ export class DashboardComponent implements OnInit {
       case 'WARNING':  return 'text-amber-400';
       default:         return 'text-emerald-400';
     }
+  }
+
+  exportPdf(): void {
+    const to = new Date().toISOString().slice(0, 10);
+    const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    this.isExportingPdf.set(true);
+    this.reportService.downloadFleetPdf(from, to).subscribe({
+      next: (blob) => {
+        this.reportService.saveBlob(blob, `fleetwise-executive-report-${from}-to-${to}.pdf`);
+        this.isExportingPdf.set(false);
+      },
+      error: () => {
+        this.isExportingPdf.set(false);
+      }
+    });
+  }
+
+  exportCsv(): void {
+    const to = new Date().toISOString().slice(0, 10);
+    const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    this.isExportingCsv.set(true);
+    this.reportService.downloadFleetCsv(from, to).subscribe({
+      next: (blob) => {
+        this.reportService.saveBlob(blob, `fleetwise-fleet-data-${from}-to-${to}.csv`);
+        this.isExportingCsv.set(false);
+      },
+      error: () => {
+        this.isExportingCsv.set(false);
+      }
+    });
   }
 }

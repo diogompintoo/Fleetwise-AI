@@ -25,11 +25,11 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **7**     | Document Storage & OCR Extraction (Azure Blob)               | ~7.0 h           | —                     | —                 | Pending                | Fuel receipts / maintenance invoices ingestion                        |
 | **8** | AI Assistant (Fleet Insights, "Why?" Root Cause, NL Queries)     | ~10.0 h          | ~1h 30m               | **~8.5 h**        | **Completed**          | Gemini 3.8 Flash LLM integration live via Spring RestClient           |
 | **9**     | Advanced Anomaly Detection (Statistical / ML)                | ~8.0 h           | —                     | —                 | Pending                | Evolving rule-based heuristics into predictive models                 |
-| **10**    | Monthly Automated Reports (Executive PDF / Excel Export)     | ~5.0 h           | —                     | —                 | Pending                | Automated report generation engine                                    |
+| **10** | Monthly Automated Reports (Executive PDF / Excel Export) | ~5.0 h | ~45m | **~4.2 h** | **Completed** | OpenPDF backend + Angular Blob download, CSV UTF-8 BOM |
 | **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h           | **~45m**              | **~3.2 h**        | **Completed**          | Backend (H2 test profile) + Frontend (npm build)                      |
 | **12**    | Observability (Azure App Insights) & Azure Key Vault         | ~4.0 h           | —                     | —                 | Pending                | Telemetry, distributed tracing, secret management                     |
 | **13**    | Technical Documentation & Portfolio Benchmark Report         | ~4.0 h           | ~0.5 h                | **~3.5 h**        | Ongoing                | Live benchmark catalog, API specs, architecture guides                |
-| **Total** | **FleetWise AI — Full Lifecycle**                            | **~89.5–92.5 h** | **~10h 15m (to date)**| **~50.9–54.5 h+** | In Progress            | Massive delivery acceleration via Antigravity, Claude and Grok        |
+| **Total** | **FleetWise AI — Full Lifecycle** | **~89.5–92.5 h** | **~11h 00m (to date)** | **~55.1–58.7 h+** | In Progress | |
 
 
 Massive delivery acceleration via Antigravity AI, Claude and Grok.                                    
@@ -489,3 +489,34 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~3h 00m (building two enterprise forms with Angular Signals, validation, computed signals, service wiring, and navigation integration).
   - **With AI:** ~15m (rapid generation of typed models, services, component UI, and routing).
   - **Time Saved:** **~2h 45m**.
+
+  ---
+
+  ### [Task 10.1] Executive Fleet Reports — PDF & CSV Export
+
+- **Date / Timestamp:** 2026-10-15
+- **Task Performed:** Implemented a full executive reporting engine generating downloadable PDF and CSV fleet reports from live analytics data, with Angular blob download integration and RBAC protection.
+- **Affected Files:**
+  - `src/main/java/com/fleetwise/report/ReportController.java`
+  - `src/main/java/com/fleetwise/report/ReportService.java`
+  - `pom.xml` (OpenPDF dependency)
+  - `frontend/src/app/services/report.service.ts`
+  - `frontend/src/app/services/index.ts`
+  - `frontend/src/app/pages/dashboard/dashboard.component.ts`
+  - `README.md`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **Backend PDF Engine (OpenPDF/LibrePDF):** Corporate header with company name and period, 4-column KPI summary cards (distance, fuel cost, consumption, cost/km), anomaly detection table highlighted in red for vehicles exceeding 15% consumption variance, per-vehicle performance breakdown table, paginated footer with confidential stamp.
+  - **Backend CSV Export:** UTF-8 BOM for native Excel compatibility, fleet KPI summary section, per-vehicle breakdown with all metrics.
+  - **REST Endpoints:** `GET /api/v1/reports/fleet/pdf` and `GET /api/v1/reports/fleet/csv` with optional `companyId` filter and `from`/`to` date range.
+  - **Angular ReportService:** Blob HTTP responses with `responseType: 'blob'`, dynamic filename generation and native browser download trigger via anchor element.
+  - **Dashboard Integration:** "Export PDF" and "Export CSV" buttons with loading state signals (`isExportingPdf`, `isExportingCsv`) and 30-day default period.
+  - **RBAC:** Both endpoints restricted to `ADMIN` and `FLEET_MANAGER` via `@PreAuthorize`.
+- **Verification:**
+  - `curl` test: HTTP 200, PDF 2.4KB generated with real fleet data.
+  - CSV test: HTTP 200, 635 bytes, correct UTF-8 BOM, 5 vehicles with accurate metrics.
+  - Anomaly detection reflected in PDF report (DD-55-66 at 42.8 L/100km flagged).
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~5h 00m (OpenPDF API learning curve, table styling, PDF pagination, CSV BOM encoding, Angular blob handling, RBAC wiring).
+  - **With AI:** ~45m (architecture, code generation, debugging).
+  - **Time Saved:** **~4h 15m**.

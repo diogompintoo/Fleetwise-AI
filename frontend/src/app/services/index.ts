@@ -5,4 +5,5 @@ export * from './driver.service';
 export * from './trip.service';
 export * from './fueling.service';
 export * from './analytics.service';
+export * from './report.service';
 

@@ -154,10 +154,10 @@ Runs on `http://localhost:4200` with automated reverse-proxying of `/api` reques
 | 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
 | 6     | Azure / cloud deployment (Railway for public demo)          | **Done** (demo) |
 | 7     | Blob Storage + document extraction                          | Planned     |
-| 8 | AI assistant (insights, “why?”, natural language questions) | Done (gpt-oss-20b Integration via RestClient) |
+| 8     | AI assistant (insights, “why?”, natural language questions) | Done (gpt-oss-20b Integration via RestClient) |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
-| 10    | AI monthly reports (PDF)                                    | Planned     |
-| 11    | CI/CD (GitHub Actions)                                      | **Done** |
+| 10    | AI monthly reports (PDF + CSV export)                       | **Done**    |
+| 11    | CI/CD (GitHub Actions)                                      | **Done**    |
 | 12    | Monitoring (App Insights) + Key Vault                       | Planned     |
 | 13    | Documentation                                               | Ongoing     |
 
@@ -172,12 +172,15 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | 1–2         | ~14.5–16.5 h    | ~2 h         | ~12.5–14.5 h     | Domain, CRUDs, validation, Docker                                                       |
 | 3           | ~6 h            | ~1h 30min    | ~4.5–5.1 h       | Fleet/vehicle metrics & anomaly rules                                                   |
 | 4           | ~13.5–14.0 h    | ~1h 15min    | ~12.2–12.7 h     | Enterprise Angular (Signals, DI, Tailwind)                                              |
-| 4.9 / 5.x   | ~3.0–4.0 h      | ~1h 30m      | ~1.5–2.5 h       | Multi-company vehicle filter + Companies/Vehicles CRUD forms                            |
+| 4.9 / 5.x   | ~3.0–4.0 h      | ~1h 30m      | ~1.5–2.5 h       | Multi-company vehicle filter + Companies/Vehicles 
+CRUD forms                            |
 | 5 (partial) | ~8.0 h          | ~1h 30min*   | ~6.5 h*          | JWT login + basic RBAC (Entra ID still pending)                                         |
 | 6 (Demo)    | ~5.0–6.0 h      | ~2h 15m      | ~3.0–3.5 h       | Railway deploy, Docker, prod JWT, SPA static files                                      |
 | 8           | ~10.0 h         | ~1h 00m*     | ~9.0 h*          | Fleet Insights (GROQ / model) via Spring RestClient                                     |
+| 10          | ~5.0 h          | ~45m         | ~4.2 h           | OpenPDF backend + Angular Blob 
+download             |
 | 11          | ~4.0 h          | ~45m         | ~3.2 h           | Backend + Frontend CI on GitHub Actions                                                 |
-| **Total**   | **~64–68.5 h**  | **~11h 45m** | **~52.4–57.0 h** | Backend + Analytics + Angular + Auth + multi-company UI                                 |
+| **Total**   | **~69–73.5 h**  | **~12h 30m** | **~56.6–61.2 h** | Backend + Analytics + Angular + Auth + multi-company UI                                 |
 
 Note on Time Estimates:
 Manual estimates serve as a reference benchmark for unassisted development. Through an AI-assisted workflow, development speed was greatly enhanced by automating repetitive code, while my focus remained on prompt engineering, architectural consistency, and verifying feature correctness.
