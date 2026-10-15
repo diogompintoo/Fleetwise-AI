@@ -23,14 +23,26 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 
 ## Screenshots
 
+### Login
+![Login](screenshots/login.png)
+
 ### Dashboard
-![Dashboard](screenshots/screenshot1.png)
+![Dashboard](screenshots/dashboard.png)
 
 ### Companies
-![Companies](screenshots/screenshot2.png)
+![Companies](screenshots/companies.png)
 
 ### Vehicles
-![Vehicles](screenshots/screenshot3.png)
+![Vehicles](screenshots/vehicles.png)
+
+### Driver Portar for fueling
+![Vehicles](screenshots/dPortalFueling.png)
+
+### Driver Portar for trip's
+![Vehicles](screenshots/dPortalTrip.png)
+
+### Pdf Report example
+![Vehicles](screenshots/report-pdf.png)
 
 ---
 
