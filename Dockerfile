@@ -6,15 +6,14 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-# =====  2: Build backend =====
+# ===== Stage 2: Build backend =====
 FROM maven:3.9-eclipse-temurin-21-alpine AS backend-build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# Copy the browser build and rename index.csr.html → index.html
+# Copy the browser build output directly into Spring Boot static resources
 COPY --from=frontend-build /app/frontend/dist/frontend/browser ./src/main/resources/static
-RUN cp src/main/resources/static/index.csr.html src/main/resources/static/index.html
 
 RUN mvn -q -DskipTests package
 
