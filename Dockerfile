@@ -1,4 +1,4 @@
-# =====  1: Build frontend =====
+# ===== Stage 1: Build frontend =====
 FROM node:20-alpine AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
@@ -17,8 +17,7 @@ COPY --from=frontend-build /app/frontend/dist/frontend/browser ./src/main/resour
 
 RUN mvn -q -DskipTests package
 
-
-# =====  3: Runtime =====
+# ===== Stage 3: Runtime =====
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=backend-build /app/target/*.jar app.jar
