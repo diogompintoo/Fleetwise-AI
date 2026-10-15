@@ -78,6 +78,7 @@ Vehicle
 
 ## Package Structure (Feature / Domain Oriented)
 
+```text
 com.fleetwise
 ├── auth/ # JWT login, JwtService, filter, demo users
 │ ├── AuthController.java
@@ -228,12 +229,12 @@ Full benchmark log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.md).
 
 | Phase | Manual Estimate | With AI | Saved |
 |---|---|---|---|
-| 1–2 Domain + API | ~15 h | ~2 h | ~13 h |
-| 3 Analytics | ~6 h | ~1.5 h | ~4.5 h |
-| 4 Angular Frontend | ~14 h | ~1.25 h | ~12.75 h |
-| 5 JWT + RBAC | ~8 h | ~1.5 h | ~6.5 h |
-| 6 Deploy (Railway) | ~6 h | ~2.25 h | ~3.75 h |
-| 8 AI Insights (LLM) | ~10 h | ~1 h | ~9 h |
-| 10 PDF/CSV Reports | ~5 h | ~0.75 h | ~4.25 h |
-| 11 CI/CD | ~4 h | ~0.75 h | ~3.25 h |
-| **Total** | **~68 h** | **~11 h** | **~57 h** |
+| 1–2 Domain + API | ~15.5 h | ~2.0 h | ~13.5 h |
+| 3 Analytics | ~6.0 h | ~1.5 h | ~4.5 h |
+| 4 Angular Frontend | ~13.7 h | ~1.25 h | ~12.5 h |
+| 5 JWT + RBAC | ~8.0 h | ~1.5 h | ~6.5 h |
+| 6 Deploy (Railway) | ~5.5 h | ~2.25 h | ~3.2 h |
+| 8 AI Insights (LLM) | ~10.0 h | ~1.5 h | ~8.5 h |
+| 10 PDF/CSV Reports | ~5.0 h | ~0.75 h | ~4.2 h |
+| 11 CI/CD | ~4.0 h | ~0.75 h | ~3.2 h |
+| **Total** | **~67.7 h** | **~11.0 h** | **~56.1 h** |
