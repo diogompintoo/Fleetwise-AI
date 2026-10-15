@@ -46,6 +46,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "outputPath": "../src/main/resources/static",
             "assets": [
               {
                 "glob": "**/*",
@@ -54,15 +55,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "security": {
-              "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -88,6 +81,8 @@
           },
           "defaultConfiguration": "production"
         },
+          "defaultConfiguration": "production"
+        },
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
@@ -106,4 +101,3 @@
       }
     }
   }
-}
