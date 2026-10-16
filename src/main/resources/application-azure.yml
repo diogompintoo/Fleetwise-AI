@@ -22,3 +22,4 @@ server:
 security:
   jwt:
     secret: ${SECURITY_JWT_SECRET:fleetwiseSecretKeyDefaultForAzureEnvironment2026SecureEnough32Bytes}
+    expiration: ${SECURITY_JWT_EXPIRATION:86400000}
