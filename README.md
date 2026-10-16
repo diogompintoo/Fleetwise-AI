@@ -5,7 +5,6 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 > Portfolio project focused on demonstrating **how AI assists software development**  
 > (time savings, architecture decisions, clean domain design).
 
-
 ## Live demo
 
 - **URL:** https://fleetwise-ai-production.up.railway.app
