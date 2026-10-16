@@ -7,7 +7,7 @@ Fleet management platform that centralises vehicle, trip, fuel and expense data 
 
 ## Live demo
 
-- **URL:** https://fleetwise-ai-production.up.railway.app
+- **URL:** https://fleetwise-ai-hceggkcpacd0a0he.spaincentral-01.azurewebsites.net/login
 - **Demo users:**
 
 | User    | Password    | Role          |
@@ -162,15 +162,15 @@ Runs on `http://localhost:4200` with automated reverse-proxying of `/api` reques
 | 2     | Spring Boot REST API + business rules                       | **Done**    |
 | 3     | Analytics (consumption, cost/km, variation, anomaly rules)  | **Done**    |
 | 4     | Angular dashboard (KPIs, tables, Signals, Tailwind)         | **Done**    |
-| 5     | JWT login foundation + basic RBAC; Entra ID later           | **In progress** |
-| 6     | Azure / cloud deployment (Railway for public demo)          | **Done** (demo) |
+| 5     | JWT login foundation + basic RBAC; Entra ID later           | **Done**    |
+| 6     | Azure / cloud deployment (Microsoft Azure App Service)      | **Done**    |
 | 7     | Blob Storage + document extraction                          | Planned     |
 | 8     | AI assistant (insights, “why?”, natural language questions) | Done (gpt-oss-20b Integration via RestClient) |
 | 9     | Anomaly detection (rules → ML)                              | Planned     |
 | 10    | AI monthly reports (PDF + CSV export)                       | **Done**    |
 | 11    | CI/CD (GitHub Actions)                                      | **Done**    |
 | 12    | Monitoring (App Insights) + Key Vault                       | Planned     |
-| 13    | Documentation                                               | Ongoing     |
+| 13    | Documentation                                               | Done/Ongoing     |
 
 ---
 
@@ -184,7 +184,7 @@ Detailed task-by-task log available in [`AI_MIGRATION_LOG.md`](AI_MIGRATION_LOG.
 | **3** | ~6.0 h | ~1.5 h | ~4.5–5.1 h | Analytics, Fleet/Vehicle Metrics & Anomaly Rules |
 | **4** | ~13.5–14.0 h | ~1h 15m | ~12.2–12.7 h | Frontend Dashboard (Angular + TypeScript + Tailwind) |
 | **5** | ~8.0 h | ~1h 30m | ~6.5 h | JWT login foundation + basic RBAC |
-| **6** | ~5.0–6.0 h | ~2h 15m | ~3.0–3.5 h | Cloud Deployment (Railway public demo) |
+| **6** | ~5.0–6.0 h | ~2h 15m | ~3.0–3.5 h | Cloud Deployment (Microsoft Azure App Service) |
 | **8** | ~10.0 h | ~1h 30m | ~8.5 h | AI Assistant (Fleet Insights, Root Cause, NL Queries) |
 | **10** | ~5.0 h | ~45m | ~4.2 h | Monthly Automated Reports (Executive PDF / Excel Export) |
 | **11** | ~4.0 h | ~45m | ~3.2 h | CI/CD Pipelines (GitHub Actions) |

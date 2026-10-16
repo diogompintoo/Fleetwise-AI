@@ -51,10 +51,9 @@ managers identify cost drivers and operational anomalies.
 | Frontend | Angular 21 (Standalone + Signals) | Enterprise-grade, reactive state without RxJS boilerplate |
 | Styling | Tailwind CSS v4 | Utility-first, dark mode, zero runtime |
 | AI Layer | Groq Cloud — openai-gpt-oss-20b | Free tier, low latency, OpenAI-compatible API |
-| Database (local) | PostgreSQL 16 (Docker) | Production parity in development |
-| Database (prod) | PostgreSQL (Railway managed) | Zero-ops, automatic backups |
-| Deploy | Railway (Docker multi-stage) | Git-push deploy, free tier, public URL |
-| CI/CD | GitHub Actions | Backend (Java 21 + H2) + Frontend (Node 20) |
+| Database (prod) | H2 (In-memory) | Fast, zero-config embedded database for Azure environment |
+| Deploy | Microsoft Azure App Service (F1 Tier) | Java 21 Linux Web App, continuous deployment |
+| CI/CD | GitHub Actions | Automated build (Angular ng build + Maven jar) & deployment |
 
 ---
 
@@ -106,7 +105,7 @@ com.fleetwise
 └── ReportService.java
 
 
----
+```
 
 ## API Reference
 
@@ -130,7 +129,7 @@ com.fleetwise
 | Reports | GET | `/api/v1/reports/fleet/pdf` | ADMIN, FLEET_MANAGER |
 | Reports | GET | `/api/v1/reports/fleet/csv` | ADMIN, FLEET_MANAGER |
 
----
+```
 
 ## Key Engineering Decisions
 
@@ -158,13 +157,10 @@ Code is organised by domain (`company/`, `vehicle/`, `trip/`) not by layer (`con
 ### 8. AI layer is additive, not load-bearing
 `GeminiService` wraps the Groq API call in a try/catch that returns a fallback string on failure. The application remains fully functional if the AI provider is unavailable.
 
-### 9. Multi-stage Docker build
-`Dockerfile` uses Node 21 Alpine to build the Angular SPA, then Maven 3.9 / Java 21 to build the JAR, and copies Angular `dist/` into Spring Boot's `static/` folder. Single container, zero reverse proxy needed.
+### 9. Automatic Environment Profile
+Uses application-azure.yml active profile on Azure App Service. Automatically sets up database initialization mode, Tomcat server settings, and JWT secret defaults.
 
-### 10. DataSeeder runs on !test profile
-`@Profile("!test")` ensures the seeder never runs in CI (H2 test profile). In production, it checks `companyRepository.count() > 0` before inserting — idempotent, safe to redeploy.
-
----
+```
 
 ## Local Development
 
@@ -172,30 +168,24 @@ Code is organised by domain (`company/`, `vehicle/`, `trip/`) not by layer (`con
 - Java 21
 - Maven 3.9+
 - Node 20+
-- Docker
 
-### Backend
+### Backend & Frontend Combined (Production Style)
 
-```bash
-# Start PostgreSQL
-docker run -d --name fleetwise-db \
-  -e POSTGRES_DB=fleetwise \
-  -e POSTGRES_USER=fleetwise \
-  -e POSTGRES_PASSWORD=fleetwise \
-  -p 5432:5432 postgres:16-alpine
-
-# Run Spring Boot (demo data seeded automatically)
-mvn spring-boot:run -Dspring-boot.run.profiles=local
-# API available at http://localhost:8081
-```
-
-### Frontend
-
-```bash
+# 1. Build Angular frontend
 cd frontend
 npm install
-npm start
-# App available at http://localhost:4200
+npx ng build --configuration=production
+
+# 2. Copy static files to Spring Boot static resources
+mkdir -p ../src/main/resources/static
+cp -r dist/*/browser/. ../src/main/resources/static/
+
+# 3. Run Spring Boot
+cd ..
+mvn spring-boot:run
+# App available at http://localhost:8080
+
+
 ```
 
 ### Demo Credentials
@@ -206,19 +196,16 @@ npm start
 | manager | manager123 | FLEET_MANAGER |
 | driver | driver123 | DRIVER |
 
----
+```
 
 ## CI/CD Pipeline
 
 Push to main
-├── Backend CI (GitHub Actions)
-│ Java 21 → mvn clean verify (H2 test profile) → JAR artifact
-└── Frontend CI (GitHub Actions)
-Node 20 → npm ci → npm run build → dist artifact
-
-Railway (auto-deploy on main)
-Docker multi-stage build → Spring Boot + Angular → PostgreSQL
-
+ ├── 1. Setup Node.js 20 & install Angular dependencies
+ ├── 2. Compile Angular SPA (npx ng build --configuration=production)
+ ├── 3. Copy compiled assets to src/main/resources/static/
+ ├── 4. Setup Java 21 Temurin & compile Spring Boot with Maven
+ └── 5. Deploy executable JAR to Azure App Service via Publish Profile
 
 ---
 
