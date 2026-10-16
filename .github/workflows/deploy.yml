@@ -14,6 +14,25 @@ jobs:
       - name: Checkout do codigo
         uses: actions/checkout@v4
 
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+
+      - name: Build do Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+  
+      - name: Copiar assets do Frontend para o Backend
+        run: |
+          mkdir -p src/main/resources/static
+          cp -r frontend/dist/* src/main/resources/static/
+
       - name: Configurar Java 21
         uses: actions/setup-java@v4
         with:
@@ -21,13 +40,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Copiar assets do Frontend para o Backend
-        run: |
-          mkdir -p src/main/resources/static
-          # Substitui 'frontend/dist' pelo caminho exato onde tens a tua pasta dist no repositório
-          cp -r frontend/dist/* src/main/resources/static/ 
-
-      - name: Compilar com Maven
+      - name: Compilar Backend com Maven
         run: mvn clean package -DskipTests
 
       - name: Deploy para o Azure App Service
