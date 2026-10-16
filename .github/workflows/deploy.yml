@@ -21,6 +21,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Copiar assets do Frontend para o Backend
+        run: |
+          mkdir -p src/main/resources/static
+          # Substitui 'frontend/dist' pelo caminho exato onde tens a tua pasta dist no repositório
+          cp -r frontend/dist/* src/main/resources/static/ 
+
       - name: Compilar com Maven
         run: mvn clean package -DskipTests
 
