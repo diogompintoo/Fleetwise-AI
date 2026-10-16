@@ -18,3 +18,7 @@ spring:
 
 server:
   port: 80
+
+security:
+  jwt:
+    secret: ${SECURITY_JWT_SECRET:fleetwiseSecretKeyDefaultForAzureEnvironment2026SecureEnough32Bytes}
