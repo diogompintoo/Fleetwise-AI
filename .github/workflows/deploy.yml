@@ -23,7 +23,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm run build --configuration production
+          npx ng build --configuration=production
 
       - name: Copiar assets do Angular para o Backend
         run: |
