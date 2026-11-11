@@ -22,18 +22,20 @@ public class DriverService {
     private final CompanyService companyService;
 
     public List<DriverResponse> findAll() {
-        return driverRepository.findAll().stream().map(DriverMapper::toResponse).toList();
+        return driverRepository.findAllWithCompany().stream().map(DriverMapper::toResponse).toList();
     }
 
     public List<DriverResponse> findByCompany(Long companyId) {
         companyService.getEntity(companyId);
-        return driverRepository.findByCompanyId(companyId).stream()
+        return driverRepository.findByCompanyIdWithCompany(companyId).stream()
                 .map(DriverMapper::toResponse)
                 .toList();
     }
 
     public DriverResponse findById(Long id) {
-        return DriverMapper.toResponse(getEntity(id));
+        return driverRepository.findByIdWithCompany(id)
+                .map(DriverMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Driver", id));
     }
 
     public Driver getEntity(Long id) {

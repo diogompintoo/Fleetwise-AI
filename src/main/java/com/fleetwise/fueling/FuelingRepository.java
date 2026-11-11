@@ -8,9 +8,19 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FuelingRepository extends JpaRepository<Fueling, Long> {
+
+    @Query("SELECT f FROM Fueling f JOIN FETCH f.vehicle v")
+    List<Fueling> findAllWithVehicle();
+
+    @Query("SELECT f FROM Fueling f JOIN FETCH f.vehicle v WHERE f.vehicle.id = :vehicleId")
+    List<Fueling> findByVehicleIdWithVehicle(@Param("vehicleId") Long vehicleId);
+
+    @Query("SELECT f FROM Fueling f JOIN FETCH f.vehicle v WHERE f.id = :id")
+    Optional<Fueling> findByIdWithVehicle(@Param("id") Long id);
 
     List<Fueling> findByVehicleId(Long vehicleId);
 

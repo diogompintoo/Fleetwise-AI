@@ -23,18 +23,20 @@ public class FuelingService {
     private final VehicleService vehicleService;
 
     public List<FuelingResponse> findAll() {
-        return fuelingRepository.findAll().stream().map(FuelingMapper::toResponse).toList();
+        return fuelingRepository.findAllWithVehicle().stream().map(FuelingMapper::toResponse).toList();
     }
 
     public List<FuelingResponse> findByVehicle(Long vehicleId) {
         vehicleService.getEntity(vehicleId);
-        return fuelingRepository.findByVehicleId(vehicleId).stream()
+        return fuelingRepository.findByVehicleIdWithVehicle(vehicleId).stream()
                 .map(FuelingMapper::toResponse)
                 .toList();
     }
 
     public FuelingResponse findById(Long id) {
-        return FuelingMapper.toResponse(getEntity(id));
+        return fuelingRepository.findByIdWithVehicle(id)
+                .map(FuelingMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Fueling", id));
     }
 
     public Fueling getEntity(Long id) {

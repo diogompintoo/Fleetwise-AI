@@ -25,18 +25,27 @@ public class TripService {
     private final DriverService driverService;
 
     public List<TripResponse> findAll() {
-        return tripRepository.findAll().stream().map(TripMapper::toResponse).toList();
+        return tripRepository.findAllWithVehicleAndDriver().stream().map(TripMapper::toResponse).toList();
     }
 
     public List<TripResponse> findByVehicle(Long vehicleId) {
         vehicleService.getEntity(vehicleId);
-        return tripRepository.findByVehicleId(vehicleId).stream()
+        return tripRepository.findByVehicleIdWithVehicleAndDriver(vehicleId).stream()
+                .map(TripMapper::toResponse)
+                .toList();
+    }
+
+    public List<TripResponse> findByDriver(Long driverId) {
+        driverService.getEntity(driverId);
+        return tripRepository.findByDriverIdWithVehicleAndDriver(driverId).stream()
                 .map(TripMapper::toResponse)
                 .toList();
     }
 
     public TripResponse findById(Long id) {
-        return TripMapper.toResponse(getEntity(id));
+        return tripRepository.findByIdWithVehicleAndDriver(id)
+                .map(TripMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Trip", id));
     }
 
     public Trip getEntity(Long id) {

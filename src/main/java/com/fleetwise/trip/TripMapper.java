@@ -41,7 +41,9 @@ public final class TripMapper {
         return new TripResponse(
                 trip.getId(),
                 trip.getVehicle().getId(),
+                trip.getVehicle() != null ? trip.getVehicle().getLicensePlate() : null,
                 trip.getDriver().getId(),
+                trip.getDriver() != null ? trip.getDriver().getName() : null,
                 trip.getDate(),
                 trip.getStartLocation(),
                 trip.getEndLocation(),

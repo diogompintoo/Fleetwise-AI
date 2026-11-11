@@ -28,6 +28,7 @@ public final class DriverMapper {
         return new DriverResponse(
                 driver.getId(),
                 driver.getCompany().getId(),
+                driver.getCompany() != null ? driver.getCompany().getName() : null,
                 driver.getName(),
                 driver.getLicense(),
                 driver.getActive()

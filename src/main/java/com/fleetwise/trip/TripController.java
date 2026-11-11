@@ -22,9 +22,13 @@ public class TripController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TripResponse>> findAll(
-            @RequestParam(required = false) Long vehicleId) {
+            @RequestParam(required = false) Long vehicleId,
+            @RequestParam(required = false) Long driverId) {
         if (vehicleId != null) {
             return ResponseEntity.ok(tripService.findByVehicle(vehicleId));
+        }
+        if (driverId != null) {
+            return ResponseEntity.ok(tripService.findByDriver(driverId));
         }
         return ResponseEntity.ok(tripService.findAll());
     }

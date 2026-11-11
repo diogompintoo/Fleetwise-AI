@@ -29,8 +29,7 @@ Phase 4 originally began with a React prototype; however, a strategic architectu
 | **11**    | CI/CD Pipelines (GitHub Actions)                             | ~4.0 h           | **~45m**              | **~3.2 h**        | **Completed**          | Backend (H2 test profile) + Frontend (npm build)                      |
 | **12**    | Observability (Azure App Insights) & Azure Key Vault         | ~4.0 h           | —                     | —                 | Pending                | Telemetry, distributed tracing, secret management                     |
 | **13**    | Technical Documentation & Portfolio Benchmark Report         | ~4.0 h           | ~0.5 h                | **~3.5 h**        | Ongoing                | Live benchmark catalog, API specs, architecture guides                |
-| **Total** | **FleetWise AI — Full Lifecycle** | **~89.5–92.5 h** | **~11h 00m (to date)** | **~55.1–58.7 h+** | In Progress | |
-
+| **Total** | **FleetWise AI — Full Lifecycle** | **~96.0–99.0 h** | **~11h 25m (to date)** | **~61.2–64.8 h+** | In Progress | |
 
 Massive delivery acceleration via Antigravity AI, Claude and Grok.                                    
 
@@ -49,6 +48,8 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
 | **4.5** | Dashboard view (KPI metric cards, reactive Signals, fleet aggregations) | `frontend/src/app/pages/dashboard/dashboard.component.ts`, `frontend/tsconfig.app.json` | ~2h 00m | ~10m | **~1h 50m** | Completed |
 | **4.6** | Companies & Vehicles views (Data tables, state badges, loading states) | `frontend/src/app/pages/companies/companies.component.ts`, `frontend/src/app/pages/vehicles/vehicles.component.ts` | ~2h 30m | ~10m | **~2h 20m** | Completed |
 | **4.7** | Production build verification & end-to-end API integration | `frontend/src/app/app.routes.server.ts`, production build & proxy wiring | ~1h 30m | ~10m | **~1h 20m** | Completed |
+| **4.10** | Driver Portal: Fast Entry for Fueling & Trips (`/driver-entry`) | `frontend/src/app/pages/driver-entry/*`, models, services, routes | ~3h 00m | ~15m | **~2h 45m** | Completed |
+| **4.11** | Full Fleet Modules: Drivers (`/drivers`), Trips (`/trips`), Fuelings (`/fuelings`) | `frontend/src/app/pages/{drivers,trips,fuelings}/*`, backend JOIN FETCH | ~6h 30m | ~25m | **~6h 05m** | Completed |
 
 ---
 
@@ -520,3 +521,51 @@ Massive delivery acceleration via Antigravity AI, Claude and Grok.
   - **Manual Estimate:** ~5h 00m (OpenPDF API learning curve, table styling, PDF pagination, CSV BOM encoding, Angular blob handling, RBAC wiring).
   - **With AI:** ~45m (architecture, code generation, debugging).
   - **Time Saved:** **~4h 15m**.
+
+---
+
+### [Task 4.11 / 5.5] Full Fleet Management Modules: Drivers, Trips & Fuelings
+
+- **Date / Timestamp:** 2026-11-11
+- **Task Performed:** Built full enterprise CRUD management modules in Angular for Drivers (`/drivers`), Trips & Mileage (`/trips`), and Fuelings (`/fuelings`). Upgraded backend JPA repositories with `JOIN FETCH` queries to eliminate N+1 latency and LazyInitialization risks across multi-tenant relationships.
+- **Affected Files:**
+  - `src/main/java/com/fleetwise/driver/DriverRepository.java`
+  - `src/main/java/com/fleetwise/driver/DriverService.java`
+  - `src/main/java/com/fleetwise/driver/DriverMapper.java`
+  - `src/main/java/com/fleetwise/driver/dto/DriverResponse.java`
+  - `src/main/java/com/fleetwise/trip/TripRepository.java`
+  - `src/main/java/com/fleetwise/trip/TripService.java`
+  - `src/main/java/com/fleetwise/trip/TripMapper.java`
+  - `src/main/java/com/fleetwise/trip/TripController.java`
+  - `src/main/java/com/fleetwise/trip/dto/TripResponse.java`
+  - `src/main/java/com/fleetwise/fueling/FuelingRepository.java`
+  - `src/main/java/com/fleetwise/fueling/FuelingService.java`
+  - `src/main/java/com/fleetwise/fueling/FuelingMapper.java`
+  - `src/main/java/com/fleetwise/fueling/dto/FuelingResponse.java`
+  - `src/main/java/com/fleetwise/common/config/SpaForwardController.java`
+  - `frontend/src/app/models/driver.model.ts`
+  - `frontend/src/app/models/trip.model.ts`
+  - `frontend/src/app/models/fueling.model.ts`
+  - `frontend/src/app/services/driver.service.ts`
+  - `frontend/src/app/services/trip.service.ts`
+  - `frontend/src/app/services/fueling.service.ts`
+  - `frontend/src/app/pages/drivers/drivers.component.ts`
+  - `frontend/src/app/pages/trips/trips.component.ts`
+  - `frontend/src/app/pages/fuelings/fuelings.component.ts`
+  - `frontend/src/app/app.routes.ts`
+  - `frontend/src/app/app.ts`
+  - `AI_MIGRATION_LOG.md`
+- **What Was Implemented:**
+  - **Backend JPA Query Optimization:** Added JPQL `JOIN FETCH` queries (`findAllWithCompany`, `findAllWithVehicleAndDriver`, `findAllWithVehicle`) across Driver, Trip, and Fueling repositories. Extended DTO responses with joined entity labels (`companyName`, `vehiclePlate`, `driverName`) so clients never need separate roundtrips to resolve foreign keys.
+  - **Backend Search Filters:** Extended `TripController` to accept `?driverId=` alongside `?vehicleId=` for flexible filtering.
+  - **SPA Forwarding:** Registered `/drivers`, `/trips`, and `/fuelings` in `SpaForwardController` to prevent 404 errors on direct browser refreshes in production.
+  - **Angular Frontend Modules:**
+    - **Drivers View (`/drivers`):** Tabular driver listing with avatar badge, driver license number, company filter, active/inactive pill, and modal form for creating/editing drivers with company selection.
+    - **Trips View (`/trips`):** Dispatches and mileage telemetry log with vehicle filter, route badge (`start → end`), odometer tracking (`start → end km`), computed distance indicator, and full CRUD modal.
+    - **Fuelings View (`/fuelings`):** Fuel event ledger with vehicle filter, liters, price per liter, station name, bold total cost highlight, and full CRUD modal with real-time calculated total cost.
+  - **Sidebar Navigation:** Integrated all three modules into the enterprise dark shell in `app.ts` with active route state highlighting.
+- **Estimated Time Saved vs. Manual Implementation:**
+  - **Manual Estimate:** ~6h 30m (writing 3 Angular standalone components with modals, reactive Signals, CRUD handlers, updating 3 JPA repositories with JOIN FETCH, adjusting DTOs, and wiring routing/navigation).
+  - **With AI:** ~25m (rapid generation of full-stack components, strict type alignment, and zero boilerplate overhead).
+  - **Time Saved:** **~6h 05m**.
+

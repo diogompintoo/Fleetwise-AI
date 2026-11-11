@@ -41,6 +41,7 @@ public final class FuelingMapper {
         return new FuelingResponse(
                 fueling.getId(),
                 fueling.getVehicle().getId(),
+                fueling.getVehicle() != null ? fueling.getVehicle().getLicensePlate() : null,
                 fueling.getDate(),
                 fueling.getOdometer(),
                 fueling.getLiters(),

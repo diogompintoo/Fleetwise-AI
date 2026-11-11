@@ -7,9 +7,22 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
+
+    @Query("SELECT t FROM Trip t JOIN FETCH t.vehicle v JOIN FETCH t.driver d")
+    List<Trip> findAllWithVehicleAndDriver();
+
+    @Query("SELECT t FROM Trip t JOIN FETCH t.vehicle v JOIN FETCH t.driver d WHERE t.vehicle.id = :vehicleId")
+    List<Trip> findByVehicleIdWithVehicleAndDriver(@Param("vehicleId") Long vehicleId);
+
+    @Query("SELECT t FROM Trip t JOIN FETCH t.vehicle v JOIN FETCH t.driver d WHERE t.driver.id = :driverId")
+    List<Trip> findByDriverIdWithVehicleAndDriver(@Param("driverId") Long driverId);
+
+    @Query("SELECT t FROM Trip t JOIN FETCH t.vehicle v JOIN FETCH t.driver d WHERE t.id = :id")
+    Optional<Trip> findByIdWithVehicleAndDriver(@Param("id") Long id);
 
     List<Trip> findByVehicleId(Long vehicleId);
 

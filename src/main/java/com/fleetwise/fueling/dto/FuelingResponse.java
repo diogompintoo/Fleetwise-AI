@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public record FuelingResponse(
         Long id,
         Long vehicleId,
+        String vehiclePlate,
         LocalDate date,
         Integer odometer,
         BigDecimal liters,
