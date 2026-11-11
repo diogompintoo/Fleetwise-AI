@@ -80,8 +80,6 @@
           },
           "defaultConfiguration": "production"
         },
-          "defaultConfiguration": "production"
-        },
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
@@ -100,3 +98,4 @@
       }
     }
   }
+}

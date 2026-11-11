@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Driver, CreateDriverRequest } from '../models';
+import { Driver, CreateDriverRequest, UpdateDriverRequest } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,14 @@ export class DriverService {
 
   create(data: CreateDriverRequest): Observable<Driver> {
     return this.http.post<Driver>(this.baseUrl, data);
+  }
+
+  update(id: number, data: UpdateDriverRequest): Observable<Driver> {
+    return this.http.put<Driver>(`${this.baseUrl}/${id}`, data);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
 

@@ -4,6 +4,7 @@ export interface Driver {
   name: string;
   license: string;
   active: boolean;
+  companyName?: string;
 }
 
 export interface CreateDriverRequest {
@@ -12,3 +13,9 @@ export interface CreateDriverRequest {
   license: string;
 }
 
+export interface UpdateDriverRequest {
+  companyId?: number;
+  name?: string;
+  license?: string;
+  active?: boolean;
+}

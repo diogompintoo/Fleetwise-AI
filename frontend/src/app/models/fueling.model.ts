@@ -7,6 +7,7 @@ export interface Fueling {
   odometer: number;
   fuelStation: string;
   vehicleId: number;
+  vehiclePlate?: string;
 }
 
 export interface CreateFuelingRequest {
@@ -16,5 +17,13 @@ export interface CreateFuelingRequest {
   odometer: number;
   fuelStation?: string;
   vehicleId: number;
+}
+
+export interface UpdateFuelingRequest {
+  date: string;
+  liters: number;
+  pricePerLiter: number;
+  odometer: number;
+  fuelStation?: string;
 }
 

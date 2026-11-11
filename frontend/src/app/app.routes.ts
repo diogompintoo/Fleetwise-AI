@@ -26,6 +26,24 @@ export const routes: Routes = [
       import('./pages/vehicles/vehicles.component').then(m => m.VehiclesComponent)
   },
   {
+    path: 'drivers',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/drivers/drivers.component').then(m => m.DriversComponent)
+  },
+  {
+    path: 'trips',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/trips/trips.component').then(m => m.TripsComponent)
+  },
+  {
+    path: 'fuelings',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/fuelings/fuelings.component').then(m => m.FuelingsComponent)
+  },
+  {
     path: 'driver-entry',
     canActivate: [authGuard],
     loadComponent: () =>

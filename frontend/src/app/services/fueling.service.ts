@@ -25,5 +25,13 @@ export class FuelingService {
   create(data: CreateFuelingRequest): Observable<Fueling> {
     return this.http.post<Fueling>(this.baseUrl, data);
   }
+
+  update(id: number, data: any): Observable<Fueling> {
+    return this.http.put<Fueling>(`${this.baseUrl}/${id}`, data);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }
 

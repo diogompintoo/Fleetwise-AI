@@ -25,5 +25,13 @@ export class TripService {
   create(data: CreateTripRequest): Observable<Trip> {
     return this.http.post<Trip>(this.baseUrl, data);
   }
+
+  update(id: number, data: any): Observable<Trip> {
+    return this.http.put<Trip>(`${this.baseUrl}/${id}`, data);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }
 

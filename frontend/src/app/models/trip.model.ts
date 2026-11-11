@@ -8,7 +8,9 @@ export interface Trip {
   endMileage: number;
   purpose: string;
   vehicleId: number;
+  vehiclePlate?: string;
   driverId: number;
+  driverName?: string;
 }
 
 export interface CreateTripRequest {
@@ -20,5 +22,14 @@ export interface CreateTripRequest {
   purpose?: string;
   vehicleId: number;
   driverId: number;
+}
+
+export interface UpdateTripRequest {
+  date: string;
+  startLocation: string;
+  endLocation: string;
+  startMileage: number;
+  endMileage: number;
+  purpose?: string;
 }
 
