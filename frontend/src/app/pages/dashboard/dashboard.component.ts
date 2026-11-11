@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { forkJoin, of, catchError } from 'rxjs';
 import { CompanyService, VehicleService, TripService, FuelingService, ReportService, AuthService } from '../../services';
 import { Company, Vehicle, Trip, Fueling } from '../../models';
-import { AnalyticsService, Insight } from '../../services/analytics.service';
+import { AnalyticsService, Insight, AnomalyDetection, ClusterStats } from '../../services/analytics.service';
 
 interface StatCard {
   label: string;
@@ -14,6 +15,7 @@ interface StatCard {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  imports: [DecimalPipe],
   template: `
     <div>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -103,7 +105,7 @@ interface StatCard {
               <h3 class="text-lg font-semibold text-white">AI Fleet Insights</h3>
             </div>
             <span class="text-xs text-blue-400 bg-blue-950 border border-blue-800 px-2.5 py-1 rounded-full">
-              Rule-based · Phase 8
+              Phase 8+9 · Statistical ML
             </span>
           </div>
 
@@ -130,6 +132,95 @@ interface StatCard {
             </div>
           }
         </div>
+
+        <!-- Phase 9: Statistical Anomaly Detection Panel -->
+        @if (auth.isManagerOrAdmin()) {
+          <div class="bg-gradient-to-r from-gray-900 via-gray-900 to-red-950/20 border border-gray-800 rounded-xl p-6 mt-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                <h3 class="text-lg font-semibold text-white">Smart Anomaly Detection</h3>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-red-400 bg-red-950/60 border border-red-800/60 px-2.5 py-1 rounded-full">
+                  AI-Powered
+                </span>
+              </div>
+            </div>
+
+            @if (anomaliesLoading()) {
+              <div class="space-y-2 animate-pulse">
+                <div class="h-14 bg-gray-950/70 border border-gray-800 rounded-lg"></div>
+                <div class="h-14 bg-gray-950/70 border border-gray-800 rounded-lg"></div>
+              </div>
+            } @else if (anomalies().length === 0) {
+              <div class="flex items-center gap-3 bg-emerald-950/40 border border-emerald-800/50 rounded-lg p-3.5">
+                <span class="text-emerald-400 text-lg">✓</span>
+                <div>
+                  <p class="text-emerald-300 font-medium text-sm">Fleet Operating Normally</p>
+                  <p class="text-emerald-500 text-xs mt-0.5">No unusual patterns detected for this period.</p>
+                </div>
+              </div>
+            } @else {
+              <div class="space-y-3 text-sm">
+                @for (anomaly of anomalies(); track anomaly.vehicleId) {
+                  <div [class]="anomalyCardClass(anomaly.severity)">
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3 flex-1 min-w-0">
+                        <span [class]="anomalySeverityBadgeClass(anomaly.severity)" class="text-xs font-bold px-2 py-0.5 rounded shrink-0 mt-0.5">
+                          {{ anomaly.severity }}
+                        </span>
+                        <div class="min-w-0">
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <p class="text-white font-semibold">{{ anomaly.licensePlate }}</p>
+                            <span class="text-xs text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded">{{ anomaly.peerGroup }}</span>
+                            <span class="text-xs text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded">{{ anomaly.detectionMethod }}</span>
+                            @if (anomaly.zScore !== null) {
+                              <span class="text-xs text-orange-400 bg-orange-950/40 border border-orange-800/40 px-1.5 py-0.5 rounded">
+                                Z={{ anomaly.zScore | number:'1.1-1' }}σ
+                              </span>
+                            }
+                          </div>
+                          <p class="text-gray-300 text-xs mt-1">
+                            <span class="font-medium">{{ anomaly.currentValue | number:'1.1-1' }} L/100km</span>
+                            @if (anomaly.baselineValue) {
+                              <span class="text-gray-500"> vs {{ anomaly.baselineValue | number:'1.1-1' }} L/100km peer avg</span>
+                            }
+                            @if (anomaly.variationPercent !== null) {
+                              <span [class]="anomaly.variationPercent > 0 ? 'text-red-400' : 'text-emerald-400'" class="ml-1 font-medium">
+                                ({{ anomaly.variationPercent > 0 ? '+' : '' }}{{ anomaly.variationPercent | number:'1.0-0' }}%)
+                              </span>
+                            }
+                          </p>
+                          @if (anomaly.rootCauseHypothesis) {
+                            <p class="text-gray-400 text-xs mt-1.5 leading-relaxed">{{ anomaly.rootCauseHypothesis }}</p>
+                          }
+                        </div>
+                      </div>
+                      <span class="text-xs text-gray-600 shrink-0 mt-0.5">{{ (anomaly.confidenceScore * 100) | number:'1.0-0' }}% conf.</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- Cluster Stats Summary -->
+              @if (clusterStats().length > 0) {
+                <div class="mt-4 pt-4 border-t border-gray-800">
+                  <p class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wider">Peer Group Baselines</p>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    @for (cluster of clusterStats(); track cluster.peerGroup) {
+                      <div class="bg-gray-950/60 border border-gray-800 rounded-lg p-2.5">
+                        <p class="text-xs text-gray-500 font-medium">{{ cluster.peerGroup }}</p>
+                        <p class="text-sm font-bold text-white">{{ cluster.mean | number:'1.1-1' }} <span class="text-xs font-normal text-gray-500">L/100km</span></p>
+                        <p class="text-xs text-gray-600">σ={{ cluster.standardDeviation | number:'1.2-2' }} · n={{ cluster.sampleSize }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
       }
     </div>
   `
@@ -154,6 +245,9 @@ export class DashboardComponent implements OnInit {
   readonly errorMessage = signal<string | null>(null);
   readonly insights = signal<Insight[]>([]);
   readonly insightsLoading = signal(false);
+  readonly anomalies = signal<AnomalyDetection[]>([]);
+  readonly anomaliesLoading = signal(false);
+  readonly clusterStats = signal<ClusterStats[]>([]);
 
   // Computed Aggregations
   readonly totalKm = computed(() =>
@@ -218,7 +312,8 @@ export class DashboardComponent implements OnInit {
   loadDashboardData(): void {
     this.isLoading.set(true);
     this.errorMessage.set(null);
-    this.loadInsights();   // ← correto
+    this.loadInsights();
+    this.loadAnomalies();
 
     forkJoin({
       companies: this.companyService.findAll().pipe(catchError(() => of([]))),
@@ -240,14 +335,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private loadInsights(): void {
+  private getPeriodStrings(): { fromStr: string; toStr: string } {
     const to = new Date();
     const from = new Date();
     from.setDate(to.getDate() - 30);
+    return {
+      fromStr: from.toISOString().slice(0, 10),
+      toStr: to.toISOString().slice(0, 10)
+    };
+  }
 
-    const fromStr = from.toISOString().slice(0, 10);
-    const toStr = to.toISOString().slice(0, 10);
-
+  private loadInsights(): void {
+    const { fromStr, toStr } = this.getPeriodStrings();
     this.insightsLoading.set(true);
     this.analyticsService.getInsights(fromStr, toStr).subscribe({
       next: (data) => {
@@ -258,6 +357,25 @@ export class DashboardComponent implements OnInit {
         this.insights.set([]);
         this.insightsLoading.set(false);
       }
+    });
+  }
+
+  private loadAnomalies(): void {
+    const { fromStr, toStr } = this.getPeriodStrings();
+    this.anomaliesLoading.set(true);
+    this.analyticsService.getAnomalies(fromStr, toStr).subscribe({
+      next: (data) => {
+        this.anomalies.set(data || []);
+        this.anomaliesLoading.set(false);
+      },
+      error: () => {
+        this.anomalies.set([]);
+        this.anomaliesLoading.set(false);
+      }
+    });
+    this.analyticsService.getClusterStats(fromStr, toStr).subscribe({
+      next: (data) => this.clusterStats.set(data || []),
+      error: () => this.clusterStats.set([])
     });
   }
 
@@ -274,6 +392,22 @@ export class DashboardComponent implements OnInit {
       case 'CRITICAL': return 'text-red-400';
       case 'WARNING':  return 'text-amber-400';
       default:         return 'text-emerald-400';
+    }
+  }
+
+  anomalyCardClass(severity: string): string {
+    switch (severity) {
+      case 'CRITICAL': return 'bg-red-950/30 border border-red-800/50 rounded-lg p-3.5';
+      case 'WARNING':  return 'bg-amber-950/30 border border-amber-800/50 rounded-lg p-3.5';
+      default:         return 'bg-gray-950/60 border border-gray-800 rounded-lg p-3.5';
+    }
+  }
+
+  anomalySeverityBadgeClass(severity: string): string {
+    switch (severity) {
+      case 'CRITICAL': return 'bg-red-900/70 text-red-300 border border-red-700/60';
+      case 'WARNING':  return 'bg-amber-900/70 text-amber-300 border border-amber-700/60';
+      default:         return 'bg-gray-800 text-gray-300 border border-gray-700';
     }
   }
 
